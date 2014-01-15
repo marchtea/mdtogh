@@ -1,0 +1,12 @@
+# Environment files
+*.so
+*.py[cod]
+
+# OS-specific files
+.DS_Store
+Desktop.ini
+Thumbs.db
+
+#vim backup
+*~
+.*.swp
