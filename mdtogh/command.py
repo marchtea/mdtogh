@@ -6,12 +6,12 @@ Implements the command-line interface for md to github.
 
 
 Usage:
-  mdtogh [options] <path>
+  mdtogh [options] [<path>]
   mdtogh -h | --help
   mdtogh --version
 
 Where:
-  <path> is a file or a directory to render, default to .
+  <path> is a file or a directory to render, [default: '.']
 
 Options:
   --gfm             Use GitHub-Flavored Markdown, e.g. comments or issues
@@ -21,11 +21,12 @@ Options:
   --toc             Generate table of contents
   --offline         Use offline renderer
 """
-__version__ = '0.0.1'
 
 import sys
 from docopt import docopt
 import json 
+from .transform import transform
+from . import __version__
 
 usage = '\n\n\n'.join(__doc__.split('\n\n\n')[1:])
 
@@ -37,8 +38,15 @@ def main(argv=None):
 
     args = docopt(usage, argv=argv, version=version)
 
-    print json.dump(args)
-    
+    json.dump(args, sys.stdout)
+
+    try:
+       transform(args['<path>'], args['--gfm'], args['--user'],
+               args['--pass'], args['--toc'], args['--offline'])
+       return 0
+    except ValueError as e:
+        print "Error: ", e
+        return 1
 
 if __name__ == '__main__':
 	main()
