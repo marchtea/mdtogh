@@ -12,3 +12,7 @@ So, I start writing this small tool, inspired & based on [grip](https://github.c
 
 *	toc support
 *	looks exactly like github pages
+
+##Current
+
+mdtogh is on hard developing. Plz wait for first version.
