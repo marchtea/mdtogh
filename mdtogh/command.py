@@ -1,5 +1,5 @@
 """\
-mdtog.command
+mdtogh.command
 -------------------
 
 Implements the command-line interface for md to github.
