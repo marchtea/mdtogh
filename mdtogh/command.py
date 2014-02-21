@@ -14,12 +14,15 @@ Where:
   <path> is a file or a directory to render, [default: '.']
 
 Options:
-  --gfm             Use GitHub-Flavored Markdown, e.g. comments or issues
-  --context=<repo>  The repository context, only taken into account with --gfm
-  --user=<username> GitHub username for API authentication
-  --pass=<password> GitHub password for API authentication
-  --toc             Generate table of contents
-  --offline         Use offline renderer
+  --cache_path=<path> path to store style file cache
+  --inline            whether generate css into html
+  --abs-css			  link css with absolute path, use only with --inline not set 
+  --gfm               Use GitHub-Flavored Markdown, e.g. comments or issues
+  --context=<repo>    The repository context, only taken into account with --gfm
+  --user=<username>   GitHub username for API authentication
+  --pass=<password>   GitHub password for API authentication
+  --toc               Generate table of contents
+  --offline           Use offline renderer
 """
 
 import sys
@@ -41,8 +44,7 @@ def main(argv=None):
     json.dump(args, sys.stdout)
 
     try:
-       transform(args['<path>'], args['--gfm'], args['--user'],
-               args['--pass'], args['--toc'], args['--offline'])
+       transform(args['<path>'], args['--cache_path'], args['--inline'], args['--abs-css'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'])
        return 0
     except ValueError as e:
         print "Error: ", e
