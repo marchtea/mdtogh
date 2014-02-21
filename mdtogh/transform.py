@@ -4,14 +4,16 @@ from .util import getDefaultPath
 import settings 
 import requests
 import re
+import sys
+import shutil
 
-def transform(path = None, cache_path = None, inline = None, abscss = None, gfm = False, username = None, password = None, toc = True, offline = False):
+def transform(path = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, toc = True, offline = False, refresh = False):
     if path == None:
         path = '.'
     if not os.path.exists(path):
         raise ValueError('File not found: ' + path)
 
-    style, style_paths = get_style(cache_path)
+    style, style_paths = get_style(cache_path, refresh)
 
     if os.path.isdir(path):
         pass
@@ -39,21 +41,25 @@ def _cache_style(urls, cache_path):
     for url in urls:
         basename = url.rsplit('/', 1)[-1]
         print 'Download css file: ', basename, '...',
+        file.flush(sys.stdout)
         filename = os.path.join(cache_path, basename)
         contents = requests.get(url).text
         with open(filename, 'w') as f:
             f.write(contents.encode('utf-8'))
         print 'done'
+        file.flush(sys.stdout)
 
 def _get_style_urls(cache_path):
     '''Get css urls from settings.STYLE_URLS_SOURCE
         if css files are already cached, return []
     '''
     try:
+        print "Start get style url"
         cached = _get_cached_style_files(cache_path)
         if not cached:
             # Find css url
             print "Fetching css url from ", settings.STYLE_URLS_SOURCE,
+            file.flush(sys.stdout)
             r = requests.get(settings.STYLE_URLS_SOURCE)
             if not 200 <= r.status_code < 300:
                 print ' * Warning: retrieving styles gave status code', r.status_code
@@ -79,27 +85,37 @@ def _get_style_contents(urls, cache_path):
         basename = url.rsplit('/', 1)[-1]
         if basename not in cached_styles:
             _cache_style([url], cache_path)
-        css_path = os.join(cache_path, basename)
+
+    for style in cached_styles:
+        basename = style.rsplit('/', 1)[-1]
+        css_path = os.path.join(cache_path, basename)
         with open(css_path, 'r') as f:
-            styles.extend(f.read())
-        file_paths.extend(css_path)
+            styles.append(f.read())
+        file_paths.append(css_path)
     return styles, file_paths
 
-def get_style(cache_path):
+def get_style(cache_path, refresh):
     '''Get github's css, render to html file later
         return style content
     '''
     if cache_path is None:
         cache_path = getDefaultPath()
     
-    print "cache_path", cache_path
 
     cache_path = os.path.join(cache_path, 'style_cache')
+    print "cache_path", cache_path
+    
+    #make a clean cache_path
+    if refresh:
+        shutil.rmtree(cache_path)
+
     if not os.path.exists(cache_path):
         os.makedirs(cache_path, 0755)
-    style_urls = settings.STYLE_URLS[:]
 
+    style_urls = settings.STYLE_URLS[:]
     style_urls.extend(_get_style_urls(cache_path))
     styles, style_paths = _get_style_contents(style_urls, cache_path)
+    print styles
+    print style_paths
     return styles, style_paths
 
