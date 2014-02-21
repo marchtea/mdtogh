@@ -6,7 +6,7 @@ Implements the command-line interface for md to github.
 
 
 Usage:
-  mdtogh [options] [<path>]
+  mdtogh [options] [<path>] ...
   mdtogh -h | --help
   mdtogh --version
 
@@ -24,6 +24,8 @@ Options:
   --toc               Generate table of contents
   --offline           Use offline renderer
   --refresh           clear cached styles & refetch them
+  --file_reg=<reg_exp> when path is a directory, using reg_exp to get file
+                       if not set, mdtogh will get all file end with .md or .markdown
 
 Notice:
 	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in a peroid.
@@ -40,7 +42,8 @@ from . import __version__
 usage = '\n\n\n'.join(__doc__.split('\n\n\n')[1:])
 
 #TODO:
-#add custom title
+#add custom title support
+
 
 def main(argv=None):
     """Entry point of this application"""

@@ -19,17 +19,26 @@ def transform(path = None, cache_path = None, css = False, rlcss = False, gfm = 
     if os.path.isdir(path):
         pass
     elif os.path.isfile(path):
-        #try:
-            content, toc = render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
-            with open('tmp.html', 'w') as f:
-                f.write(content.encode('utf-8'))
-            #render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
-
-            print "done."
-        #except RuntimeError as ex:
-        #    print "Error: ", ex
+        _transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
     else:
         raise ValueError('Not supported file: ' + path)
+
+def _transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths):
+    try:
+        content, toc = render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+
+        with open(_get_htmlfilename(path), 'w') as f:
+            f.write(content.encode('utf-8'))
+        render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+
+        print "done."
+    except RuntimeError as ex:
+       print "Error: ", ex
+
+def _get_htmlfilename(path):
+    basename = os.path.basename(path)
+    filename = re.split('\.(markdown|md|)', basename)[0]
+    return filename + '.html'
 
 
 
