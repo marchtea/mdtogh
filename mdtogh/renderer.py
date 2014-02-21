@@ -40,7 +40,7 @@ def render_file(filename, css, rlcss, gfm, username, password, toc, offline, sty
 	if css:
 		styles[:] = []
 		if rlcss:
-			style_paths = [os.path.abspath(path) for path in style_paths]
+			style_paths = [os.path.relpath(path) for path in style_paths]
 	else:
 		style_paths[:] = []
 
