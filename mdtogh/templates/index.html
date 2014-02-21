@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{% if filename %}{{ filename }}{% endif %}{% endblock %}
+
+{%- block styles -%}
+  {%- for style_path in style_paths -%}
+  <link rel="stylesheet" href="{{ style_path }}" />
+  {% endfor -%}
+  {%- if styles %}
+  <style>
+    {% for style in styles -%}
+    {{ style }}
+    {% endfor -%}
+  </style>
+  {% endif -%}
+  <style>
+    .previewPage {
+      margin: 64px auto;
+      width: 920px;
+    }
+  </style>
+{%- endblock -%}
+
+{%- block page -%}
+  <div class="file-box">
+	<div class="file">
+		<div id="readme" class="blob instapaper_body announce md">
+		  <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+			{{ content|safe }}
+		  </article>
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+{%- endblock -%}

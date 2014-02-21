@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}{% endblock %}</title>
+  {%- block styles %}{% endblock %}
+  {%- block priority_scripts %}{% endblock %}
+</head>
+<body>
+  <div class="page">
+    {% block page %}{% endblock %}
+  </div>
+  {%- block scripts %}{% endblock %}
+  <div style="text-align:center">
+	  Powered by <a href="https://github.com/marchtea/md_to_github_html">mdtogh</a>
+  </div>
+</body>
+</html>

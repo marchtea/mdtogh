@@ -6,6 +6,7 @@ import requests
 import re
 import sys
 import shutil
+import codecs
 
 def transform(path = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, toc = True, offline = False, refresh = False):
     if path == None:
@@ -18,14 +19,15 @@ def transform(path = None, cache_path = None, css = False, rlcss = False, gfm = 
     if os.path.isdir(path):
         pass
     elif os.path.isfile(path):
-        try:
-            content, toc = render_file(path, gfm, username, password, toc, offline)
-            f = open('tmp.html', 'w')
-            f.write(content)
-            f.close()
+        #try:
+            content, toc = render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+            with open('tmp.html', 'w') as f:
+                f.write(content.encode('utf-8'))
+            #render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+
             print "done."
-        except RuntimeError as ex:
-            print "Error: ", ex
+        #except RuntimeError as ex:
+        #    print "Error: ", ex
     else:
         raise ValueError('Not supported file: ' + path)
 
@@ -54,7 +56,6 @@ def _get_style_urls(cache_path):
         if css files are already cached, return []
     '''
     try:
-        print "Start get style url"
         cached = _get_cached_style_files(cache_path)
         if not cached:
             # Find css url
@@ -65,6 +66,7 @@ def _get_style_urls(cache_path):
                 print ' * Warning: retrieving styles gave status code', r.status_code
             urls = re.findall(settings.STYLE_URLS_RE, r.text)
             print "......done"
+            print urls
             return urls
 
             ##cache style files 
@@ -89,7 +91,7 @@ def _get_style_contents(urls, cache_path):
     for style in cached_styles:
         basename = style.rsplit('/', 1)[-1]
         css_path = os.path.join(cache_path, basename)
-        with open(css_path, 'r') as f:
+        with codecs.open(css_path, mode='r', encoding='utf-8') as f:
             styles.append(f.read())
         file_paths.append(css_path)
     return styles, file_paths
@@ -103,7 +105,6 @@ def get_style(cache_path, refresh):
     
 
     cache_path = os.path.join(cache_path, 'style_cache')
-    print "cache_path", cache_path
     
     #make a clean cache_path
     if refresh:
@@ -115,7 +116,5 @@ def get_style(cache_path, refresh):
     style_urls = settings.STYLE_URLS[:]
     style_urls.extend(_get_style_urls(cache_path))
     styles, style_paths = _get_style_contents(style_urls, cache_path)
-    print styles
-    print style_paths
     return styles, style_paths
 

@@ -24,6 +24,11 @@ Options:
   --toc               Generate table of contents
   --offline           Use offline renderer
   --refresh           clear cached styles & refetch them
+
+Notice:
+	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in a peroid.
+	If you need to generate more than that, please set --user & --pass.
+	Also, --user & --pass is send with plain text.
 """
 
 import sys
@@ -34,22 +39,25 @@ from . import __version__
 
 usage = '\n\n\n'.join(__doc__.split('\n\n\n')[1:])
 
+#TODO:
+#add custom title
+
 def main(argv=None):
     """Entry point of this application"""
     if argv is None:
         argv = sys.argv[1:]
-    version = 'mdtogh ' + __version__
+	version = 'mdtogh ' + __version__
 
-    args = docopt(usage, argv=argv, version=version)
+	args = docopt(usage, argv=argv, version=version)
 
-    json.dump(args, sys.stdout)
+	json.dump(args, sys.stdout)
 
-    try:
-       transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'], args['--refresh'])
-       return 0
-    except ValueError as e:
-        print "Error: ", e
-        return 1
+    #try:
+	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'], args['--refresh'])
+	return 0
+    #except ValueError as e:
+    #    print "Error: ", e
+    #    return 1
 
 if __name__ == '__main__':
 	main()

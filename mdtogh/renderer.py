@@ -1,7 +1,15 @@
-from .github_renderer import render_content
+from .github_renderer import github_render_content
 from .toc import get_toc
+from jinja2 import Environment, PackageLoader
+import os.path
 
-def render_file(filename, gfm, username, password, toc, offline):
+##for jinjia2
+##Get template to render
+##TODO: add custom template support
+env = Environment(loader=PackageLoader('mdtogh', 'templates'))
+template = env.get_template('index.html')
+
+def render_content(filename, gfm, username, password, toc, offline):
 	'''render one file
 		return: content, toc	
 	'''
@@ -10,7 +18,7 @@ def render_file(filename, gfm, username, password, toc, offline):
 		#offline_renderer	
 		pass
 	with open(filename) as f:
-		content, message = render_content(f.read(), gfm, None, username, password)
+		content, message = github_render_content(f.read(), gfm, None, username, password)
 		if message != None:
 			raise RuntimeError('render file error: ' + message)
 
@@ -19,3 +27,25 @@ def render_file(filename, gfm, username, password, toc, offline):
 		toc = get_toc(filename)
 	return content, toc
 
+def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
+	'''
+		render file using template
+		return:
+			content, toc
+	'''
+	content, toc = render_content(filename, gfm, username, password, toc, offline)
+
+	#if using css, then clear styles
+	#otherwise, clear style_paths
+	if css:
+		styles[:] = []
+		if rlcss:
+			style_paths = [os.path.abspath(path) for path in style_paths]
+	else:
+		style_paths[:] = []
+
+	print "start render..."	
+	print type(content)
+
+	return template.render(content=content, filename=filename,
+			style_paths=style_paths, styles=styles), toc
