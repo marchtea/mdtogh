@@ -8,32 +8,63 @@ import sys
 import shutil
 import codecs
 
-def transform(path = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, toc = True, offline = False, refresh = False):
-    if path == None:
-        path = '.'
-    if not os.path.exists(path):
-        raise ValueError('File not found: ' + path)
+def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, toc = True, offline = False, refresh = False, file_reg = None):
+    if len(paths) == 0:
+        paths = ['.']
 
+    #Get style file
     style, style_paths = get_style(cache_path, refresh)
+    #compile file reg exp
+    file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
+    file_reg = re.compile(file_reg, re.I)
 
-    if os.path.isdir(path):
-        pass
-    elif os.path.isfile(path):
-        _transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
-    else:
-        raise ValueError('Not supported file: ' + path)
+    render_flist = []
+
+    for path in paths:
+        if not os.path.exists(path):
+            print "File not found: " + path
+            continue
+        #TODO:
+        #    add recursive support
+        if os.path.isdir(path):
+            path_files = os.listdir(path)
+            path_files = [os.path.join(path, f) for f in path_files]
+            render_flist.extend([f for f in path_files if os.path.isfile(f) and file_reg.search(f)])
+        elif os.path.isfile(path):
+            render_flist.append(path)
+        else:
+            raise ValueError('Not supported file: ' + path)
+    
+    print "in render_flist"
+    for f in render_flist:
+       print f
+
+    tocs = []
+
+    for f in render_flist:
+        try:
+            content, toc = render_file(f, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+            htmlname = _get_htmlfilename(f)
+            with open(htmlname, 'w') as f:
+                f.write(content.encode('utf-8'))
+
+            tocs.append([htmlname, toc])
+
+            print "done."
+        except RuntimeError as ex:
+           print "Error: ", ex
+        #_transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+
+    for toc in tocs:
+        print toc[0], ":  ", toc[1]
+
+
+
+
 
 def _transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths):
-    try:
-        content, toc = render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+    pass
 
-        with open(_get_htmlfilename(path), 'w') as f:
-            f.write(content.encode('utf-8'))
-        render_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
-
-        print "done."
-    except RuntimeError as ex:
-       print "Error: ", ex
 
 def _get_htmlfilename(path):
     basename = os.path.basename(path)
@@ -41,11 +72,11 @@ def _get_htmlfilename(path):
     return filename + '.html'
 
 
-
 def _get_cached_style_files(cache_path):
     """Gets the URLs of the cached styles."""
     cached_styles = os.listdir(cache_path)
     return [os.path.join(cache_path, style) for style in cached_styles]
+
 
 def _cache_style(urls, cache_path):
     """Fetches the given URLs and caches their contents in the given directory."""
@@ -59,6 +90,7 @@ def _cache_style(urls, cache_path):
             f.write(contents.encode('utf-8'))
         print 'done'
         file.flush(sys.stdout)
+
 
 def _get_style_urls(cache_path):
     '''Get css urls from settings.STYLE_URLS_SOURCE
@@ -85,6 +117,7 @@ def _get_style_urls(cache_path):
         print '* Error: Retrive style error:', str(ex)
     return []
 
+
 def _get_style_contents(urls, cache_path):
     '''fetching css file content, cache if not exists
        return contents, file_paths
@@ -104,6 +137,7 @@ def _get_style_contents(urls, cache_path):
             styles.append(f.read())
         file_paths.append(css_path)
     return styles, file_paths
+
 
 def get_style(cache_path, refresh):
     '''Get github's css, render to html file later

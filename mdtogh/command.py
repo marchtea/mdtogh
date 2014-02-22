@@ -25,7 +25,7 @@ Options:
   --offline           Use offline renderer
   --refresh           clear cached styles & refetch them
   --file_reg=<reg_exp> when path is a directory, using reg_exp to get file
-                       if not set, mdtogh will get all file end with .md or .markdown
+					   if not set, mdtogh will get all files end with .md or .markdown, Notice: this is case-insensitive.
 
 Notice:
 	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in a peroid.
@@ -43,7 +43,7 @@ usage = '\n\n\n'.join(__doc__.split('\n\n\n')[1:])
 
 #TODO:
 #add custom title support
-
+#add recursive support
 
 def main(argv=None):
     """Entry point of this application"""
@@ -56,7 +56,7 @@ def main(argv=None):
 	json.dump(args, sys.stdout)
 
     #try:
-	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'], args['--refresh'])
+	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'], args['--refresh'], args['--file_reg'])
 	return 0
     #except ValueError as e:
     #    print "Error: ", e

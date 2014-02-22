@@ -2,7 +2,7 @@ import pkgutil
 import os
 import sys
 
-def find_package(import_name):                                                                                                                                                    
+def find_package(import_name): 
     #copy from flask
     """Finds a package and returns the prefix (or None if the package is
     not installed) as well as the folder that contains the package or
@@ -52,6 +52,7 @@ def find_package(import_name):
             base_dir = site_parent
             return base_dir, package_path
     return None, package_path
+
 
 def getDefaultPath():
     print "Name: ", __name__
