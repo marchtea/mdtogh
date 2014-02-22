@@ -59,13 +59,6 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
         print toc[0], ":  ", toc[1]
 
 
-
-
-
-def _transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths):
-    pass
-
-
 def _get_htmlfilename(path):
     basename = os.path.basename(path)
     filename = re.split('\.(markdown|md|)', basename)[0]
