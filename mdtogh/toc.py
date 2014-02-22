@@ -11,4 +11,8 @@ def get_toc(filename):
 
 
 def github_link_renderer(link, md):
+	'''
+		get github-like heading href.
+	'''
+	link = link.lower().replace(' ', '-').replace('+', '')
 	return quote_plus(link.encode('utf-8'))
