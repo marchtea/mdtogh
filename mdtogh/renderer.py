@@ -22,10 +22,10 @@ def render_content(filename, gfm, username, password, toc, offline):
 		if message != None:
 			raise RuntimeError('render file error: ' + message)
 
-	toc = None
+	gentoc = None
 	if toc:
-		toc = get_toc(filename)
-	return content, toc
+		gentoc = get_toc(filename)
+	return content, gentoc
 
 
 def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
