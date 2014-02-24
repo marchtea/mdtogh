@@ -46,7 +46,6 @@ def render_file(filename, css, rlcss, gfm, username, password, toc, offline, sty
 		style_paths[:] = []
 
 	print "start render..."	
-	print type(content)
 
 	return template.render(content=content, filename=filename,
 			style_paths=style_paths, styles=styles), toc
