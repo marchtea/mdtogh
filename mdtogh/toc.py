@@ -24,8 +24,9 @@ def _toc(toc_list, level = 1):
 	menus = []
 	for li in toc_list:
 		menu = [ ['h%d' % level, li.a.get_text(), li.a.attrs['href']] ]
+		#menu = [ [li.a.get_text(), li.a.attrs['href']] ]
 		if li.ul is not None:
-			menu.extend(_toc(li.select('ul li'), level + 1))
+			menu.extend(_toc(li.ul.find_all('li', recursive=False), level+1))
 		menus.extend(menu)
 	return menus
 
