@@ -32,14 +32,10 @@ def render_content(filename, gfm, username, password, toc, offline):
 	return content, gentoc
 
 
-def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
+def render_with_template(title, content, toc, prevfile, nextfile, css, rlcss, styles, style_paths):
 	'''
 		render file using template
-		return:
-			content, toc
 	'''
-	content, toc = render_content(filename, gfm, username, password, toc, offline)
-
 	#if using css, then clear styles
 	#otherwise, clear style_paths
 	if css:
@@ -49,7 +45,23 @@ def render_file(filename, css, rlcss, gfm, username, password, toc, offline, sty
 	else:
 		style_paths[:] = []
 
-	print "start render..."	
+	return template.render(content=content, filetitle=title,
+			style_paths=style_paths, styles=styles)
 
-	return template.render(content=content, filename=filename,
-			style_paths=style_paths, styles=styles), toc
+
+#def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
+	#content, toc = render_content(filename, gfm, username, password, toc, offline)
+
+	##if using css, then clear styles
+	##otherwise, clear style_paths
+	#if css:
+		#styles[:] = []
+		#if rlcss:
+			#style_paths = [os.path.relpath(path) for path in style_paths]
+	#else:
+		#style_paths[:] = []
+
+	#print "start render..."	
+
+	#return template.render(content=content, filename=filename,
+			#style_paths=style_paths, styles=styles), toc

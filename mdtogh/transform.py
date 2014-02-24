@@ -1,5 +1,6 @@
 import os
-from .renderer import render_file
+from .renderer import render_content
+from .renderer import render_with_template
 from .util import getDefaultPath
 import settings 
 import requests
@@ -13,7 +14,7 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
         paths = ['.']
 
     #Get style file
-    style, style_paths = get_style(cache_path, refresh)
+    styles, style_paths = get_style(cache_path, refresh)
     #compile file reg exp
     file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
     file_reg = re.compile(file_reg, re.I)
@@ -39,24 +40,32 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
     for f in render_flist:
        print f
 
+    contents = []
     tocs = []
 
+    #get all file rendered using github api or offline renderer
+    #Also, get toc
     for f in render_flist:
         try:
-            content, toc = render_file(f, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
+            content, toc = render_content(f, gfm, username, password, toc, offline)
             htmlname = _get_htmlfilename(f)
-            with open(htmlname, 'w') as f:
-                f.write(content.encode('utf-8'))
-
-            tocs.append([htmlname, toc])
+            contents.append([htmlname, content])
+            tocs.append(toc)
 
             print "done."
         except RuntimeError as ex:
            print "Error: ", ex
-        #_transform_file(path, css, rlcss, gfm, username, password, toc, offline, style, style_paths)
 
-    for toc in tocs:
-        print toc[0], ":  ", toc[1]
+    #After get all file rendered, render them with template & save into files
+    for i in range(len(contents)):
+        p = i - 1 if i > 0 else None 
+        n = i + 1 if i != len(contents) else None
+
+        rendered = render_with_template('', contents[i][1], toc, p, n, css, rlcss, styles, style_paths)
+        with open(contents[i][0], 'w') as f:
+            f.write(rendered.encode('utf-8'))
+
+    print tocs
 
 
 def _get_htmlfilename(path):

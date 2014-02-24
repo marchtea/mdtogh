@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% if filename %}{{ filename }}{% endif %}{% endblock %}
+{% block title %}{% if filetitle %}{{ filetitle }}{% endif %}{% endblock %}
 
 {%- block styles -%}
   {%- for style_path in style_paths -%}
