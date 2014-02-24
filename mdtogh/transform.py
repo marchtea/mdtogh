@@ -48,9 +48,9 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
     for f in render_flist:
         try:
             content, toc = render_content(f, gfm, username, password, toc, offline)
-            htmlname = _get_htmlfilename(f)
+            htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
-            tocs.append(toc)
+            tocs.append(__process_toc(toc, htmlname))
 
             print "done."
         except RuntimeError as ex:
@@ -58,8 +58,8 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
 
     #After get all file rendered, render them with template & save into files
     for i in range(len(contents)):
-        p = i - 1 if i > 0 else None 
-        n = i + 1 if i != len(contents) else None
+        p = contents[i - 1][0] if i > 0 else None 
+        n = contents[i + 1][0] if i + 1 != len(contents) else None
 
         rendered = render_with_template('', contents[i][1], toc, p, n, css, rlcss, styles, style_paths)
         with open(contents[i][0], 'w') as f:
@@ -68,10 +68,19 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
     print tocs
 
 
-def _get_htmlfilename(path):
+def __get_htmlfilename(path):
     basename = os.path.basename(path)
     filename = re.split('\.(markdown|md|)', basename)[0]
     return filename + '.html'
+
+
+def __process_toc(toc, htmlname):
+    ##process toc, add htmlname into link
+    print toc
+    for header in toc:
+        header[2] = htmlname + header[2]
+    return toc
+
 
 
 def _get_cached_style_files(cache_path):
