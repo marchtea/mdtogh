@@ -38,7 +38,7 @@ def get_github_toc(content):
 	for link in toclinks:
 		a = link.parent
 		h = a.parent
-		tocs.append([h.name, a.attrs['href'], h.get_text(strip=True)])
+		tocs.append([h.name, h.get_text(strip=True), a.attrs['href']])
 
 	return tocs
 

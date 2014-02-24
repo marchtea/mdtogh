@@ -1,5 +1,6 @@
 from .github_renderer import github_render_content
 from .toc import get_toc
+from .toc import get_github_toc
 from jinja2 import Environment, PackageLoader
 import os.path
 
@@ -15,8 +16,11 @@ def render_content(filename, gfm, username, password, toc, offline):
 	'''
 	print 'Rendering: ', filename
 	if offline:
-		#offline_renderer	
+		#offline_renderer, using get_toc to get toc
+		gentoc = get_toc(filename)
 		pass
+
+	##using github renderer
 	with open(filename) as f:
 		content, message = github_render_content(f.read(), gfm, None, username, password)
 		if message != None:
@@ -24,7 +28,7 @@ def render_content(filename, gfm, username, password, toc, offline):
 
 	gentoc = None
 	if toc:
-		gentoc = get_toc(filename)
+		gentoc = get_github_toc(content)
 	return content, gentoc
 
 
