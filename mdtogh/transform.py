@@ -1,6 +1,7 @@
 import os
 from .renderer import render_content
 from .renderer import render_with_template
+from .renderer import render_toc
 from .util import getDefaultPath
 import settings 
 import requests
@@ -50,7 +51,7 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
             content, toc = render_content(f, gfm, username, password, toc, offline)
             htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
-            tocs.append(__process_toc(toc, htmlname))
+            tocs.extend(__process_toc(toc, htmlname))
 
             print "done."
         except RuntimeError as ex:
@@ -66,6 +67,12 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
             f.write(rendered.encode('utf-8'))
 
     print tocs
+    rtoc = render_toc(tocs)
+    with open('toc.html', 'w') as f:
+        f.write(rtoc.encode('utf-8'))
+
+    #print render_toc(tocs)
+    #print tocs
 
 
 def __get_htmlfilename(path):
@@ -76,7 +83,6 @@ def __get_htmlfilename(path):
 
 def __process_toc(toc, htmlname):
     ##process toc, add htmlname into link
-    print toc
     for header in toc:
         header[2] = htmlname + header[2]
     return toc

@@ -7,8 +7,10 @@ import os.path
 ##for jinjia2
 ##Get template to render
 ##TODO: add custom template support
-env = Environment(loader=PackageLoader('mdtogh', 'templates'))
+env = Environment(loader=PackageLoader('mdtogh', 'templates'),
+		extensions=['jinja2.ext.do', 'jinja2.ext.loopcontrols'])
 template = env.get_template('index.html')
+toc_template = env.get_template('toc.html')
 
 def render_content(filename, gfm, username, password, toc, offline):
 	'''render one file
@@ -48,6 +50,8 @@ def render_with_template(title, content, toc, prevfile, nextfile, css, rlcss, st
 	return template.render(content=content, filetitle=title,
 			style_paths=style_paths, styles=styles)
 
+def render_toc(tocs):
+	return toc_template.render(tocs = tocs)
 
 #def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
 	#content, toc = render_content(filename, gfm, username, password, toc, offline)

@@ -31,6 +31,14 @@ def _toc(toc_list, level = 1):
 	return menus
 
 
+def github_link_renderer(link, md):
+	'''
+		get github-like heading href.
+	'''
+	link = link.lower().replace(' ', '-').replace('+', '')
+	return quote_plus(link.encode('utf-8'))
+
+
 def get_github_toc(content):
 	soup = BeautifulSoup(content)
 	toclinks = soup.select('a.anchor span.octicon.octicon-link')
@@ -43,9 +51,3 @@ def get_github_toc(content):
 	return tocs
 
 
-def github_link_renderer(link, md):
-	'''
-		get github-like heading href.
-	'''
-	link = link.lower().replace(' ', '-').replace('+', '')
-	return quote_plus(link.encode('utf-8'))
