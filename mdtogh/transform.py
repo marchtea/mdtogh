@@ -2,6 +2,7 @@ import os
 from .renderer import render_content
 from .renderer import render_with_template
 from .renderer import render_toc
+from .renderer import render_index
 from .util import getDefaultPath
 import settings 
 import requests
@@ -10,7 +11,7 @@ import sys
 import shutil
 import codecs
 
-def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, toc = True, offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, offline = False, refresh = False, file_reg = None):
     if len(paths) == 0:
         paths = ['.']
 
@@ -48,7 +49,7 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
     #Also, get toc
     for f in render_flist:
         try:
-            content, toc = render_content(f, gfm, username, password, toc, offline)
+            content, toc = render_content(f, gfm, username, password, needtoc, offline)
             htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
             tocs.extend(__process_toc(toc, htmlname))
@@ -62,17 +63,18 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
         p = contents[i - 1][0] if i > 0 else None 
         n = contents[i + 1][0] if i + 1 != len(contents) else None
 
-        rendered = render_with_template('', contents[i][1], toc, p, n, css, rlcss, styles, style_paths)
+        rendered = render_with_template('', contents[i][1], toc, p, n, css, rlcss, needtoc, styles, style_paths)
         with open(contents[i][0], 'w') as f:
             f.write(rendered.encode('utf-8'))
 
-    print tocs
-    rtoc = render_toc(tocs)
-    with open('toc.html', 'w') as f:
-        f.write(rtoc.encode('utf-8'))
+    if needtoc:
+        print tocs
+        rtoc = render_toc(tocs)
 
-    #print render_toc(tocs)
-    #print tocs
+        ##after render toc, we render index
+        book_index = render_index('TestBook', 'TAOP.png', 'Test for book generate', rtoc)
+        with open('index.html', 'w') as f:
+            f.write(book_index.encode('utf-8'))
 
 
 def __get_htmlfilename(path):

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{% if filetitle %}{{ filetitle }}{% endif %}{% endblock %}
+
+{%- block styles -%}
+  {%- for style_path in style_paths -%}
+  <link rel="stylesheet" href="{{ style_path }}" />
+  {% endfor -%}
+  {%- if styles %}
+  <style>
+    {% for style in styles -%}
+    {{ style }}
+    {% endfor -%}
+  </style>
+  {% endif -%}
+  <style>
+    .file-box {
+      margin: 64px auto;
+      width: 920px;
+    }
+
+	body {
+		font-size: 14px;
+		line-height: 22px;
+		<!--font-family: "adelle",Georgia,"Times New Roman",serif;-->
+		color: #4e443c;
+		background: #f0efe7 url(body.jpg);
+	}
+
+	.book-toc {
+
+	}
+	a {
+		color: #0388a6;
+	}
+	a:hover {
+		color: #04b1d8;
+	}
+	ol.book-toc li.chapter{
+		margin-bottom:0.6em
+	}
+	ol.book-toc, ol{
+		list-style:none
+	}
+	ol.book-toc{
+		margin:30px 36px
+	}
+	ol.book-toc a{
+		padding-left:4px
+	}
+	h1 {
+		font-size: 36px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	h2 {
+		font-size: 18px;
+		line-height: 44px;
+		color: #f14e32;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	h3, h4, h5, h6 {
+		font-size: 14px;
+		line-height: 44px;
+		color: #f14e32;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	ol.book-toc h1{
+		font-size: 24px;
+		line-height: 44px;
+		margin-bottom: 0.4em;
+	}
+	ol.book-toc h2 {
+		font-size: 16px;
+		line-height: 44px;
+		color: #f14e32;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	ol.book-toc h3, h4, h5, h6 {
+		font-size: 12px;
+		line-height: 44px;
+		color: #f14e32;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	p {
+		margin: 0 0 11px;
+		font-size: 14px;
+		line-height: 22px;
+	}
+	#main {
+		background-color: #fcfcfa;
+		border: solid 1px #e2e0d8;
+		border-radius: 5px;
+		padding: 22px;
+		margin-bottom: 35px;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		-ms-border-radius: 5px;
+		-o-border-radius: 5px;
+	}
+	div {
+		display: block;
+	}
+
+
+  </style>
+{%- endblock -%}
+
+{%- block page -%}
+  <div class="file-box">
+	<div class="content">
+		<div id="main">
+			<h1>{{ booktitle|safe }}</h1>
+			{% if coverimage -%}
+			<img style="float:right;margin: -20px 40px 0 40px;" src="{{ coverimage }}" width="118" height="157">
+			{%- endif %}
+			{% if description %}
+			<p>{{ description }}</p>
+			{% endif %}
+			{{ toc }}
+		</div>
+	</div>
+  </div>
+  
+  <div>&nbsp;</div>
+{%- endblock -%}

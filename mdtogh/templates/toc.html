@@ -1,0 +1,38 @@
+<ol class="book-toc">
+	{% set ollevel = [] -%}
+	{%- for toc in tocs -%}
+		{%- if loop.first -%}
+			{% set culevel = toc[0] %}
+			{% do ollevel.append(toc[0]) %}
+		{% elif toc[0] > culevel %}
+			<ol>
+			{% set culevel = toc[0] %}
+			{% do ollevel.append(toc[0]) %}
+		{% elif toc[0][1]|int == culevel -%}
+			</li>
+		{% else %}
+			</li>
+			{% for i in range(ollevel|count - 1, 0, -1) -%}
+				{% if ollevel[i] == toc[0] %}{% break %}{% endif %}
+				{% do ollevel.pop() %}
+				</ol>
+				</li>
+			{%- endfor -%}
+			{%- set culevel = toc[0] %}
+
+		{%- endif -%}
+
+		<li {% if toc[0] == "h1" -%} class="chapter" {%- endif %}><{{ toc[0] }}><a href="{{ toc[2] }}">{{ toc[1] }}</a></{{ toc[0] }}>
+
+
+	{% if loop.last -%}
+		{% for i in range(ollevel|count - 1, 0, -1) -%}
+			{% do ollevel.pop() %}
+			</ol>
+			</li>
+		{%- endfor %}
+	{%- endif %}
+
+	{%- endfor %}
+</ol>
+
