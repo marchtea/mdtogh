@@ -12,10 +12,8 @@ def get_toc(filename):
 	md.convert(text)
 
 	#convert to toc list
-	print md.toc
 	soup = BeautifulSoup(md.toc)
 	tocs = _toc(soup.select('div > ul > li'))
-	print tocs
 
 	return tocs 
 

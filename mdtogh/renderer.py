@@ -19,18 +19,20 @@ def render_content(filename, gfm, username, password, toc, offline):
 	print 'Rendering: ', filename
 	if offline:
 		#offline_renderer, using get_toc to get toc
+		content = ''
 		gentoc = get_toc(filename)
 		pass
+	else:
+		##using github renderer
+		with open(filename) as f:
+			content, message = github_render_content(f.read(), gfm, None, username, password)
+			if message != None:
+				raise RuntimeError('render file error: ' + message)
 
-	##using github renderer
-	with open(filename) as f:
-		content, message = github_render_content(f.read(), gfm, None, username, password)
-		if message != None:
-			raise RuntimeError('render file error: ' + message)
+		gentoc = None
+		if toc:
+			gentoc = get_github_toc(content)
 
-	gentoc = None
-	if toc:
-		gentoc = get_github_toc(content)
 	return content, gentoc
 
 
