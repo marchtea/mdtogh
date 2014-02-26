@@ -22,6 +22,7 @@ Options:
   --user=<username>   GitHub username for API authentication
   --pass=<password>   GitHub password for API authentication
   --toc               Generate table of contents
+  --book=<book.json>  Generate toc with book info, only used when --toc is set
   --offline           Use offline renderer
   --refresh           clear cached styles & refetch them
   --file_reg=<reg_exp> when path is a directory, using reg_exp to get file
@@ -56,7 +57,7 @@ def main(argv=None):
 	json.dump(args, sys.stdout)
 
     #try:
-	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--offline'], args['--refresh'], args['--file_reg'])
+	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['book'], args['--offline'], args['--refresh'], args['--file_reg'])
 	return 0
     #except ValueError as e:
     #    print "Error: ", e

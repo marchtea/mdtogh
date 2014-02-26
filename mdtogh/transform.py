@@ -11,7 +11,7 @@ import sys
 import shutil
 import codecs
 
-def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
     if len(paths) == 0:
         paths = ['.']
 
