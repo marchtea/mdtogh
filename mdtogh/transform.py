@@ -10,6 +10,7 @@ import re
 import sys
 import shutil
 import codecs
+import json
 
 def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
     if len(paths) == 0:
@@ -72,9 +73,23 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
         rtoc = render_toc(tocs)
 
         ##after render toc, we render index
-        book_index = render_index('TestBook', 'TAOP.png', 'Test for book generate', rtoc)
+        bookinfo = __get_book_conf(book)
+        print type(bookinfo)
+        if bookinfo:
+            book_index = render_index(bookinfo['title'], bookinfo['coverimage'], bookinfo['description'], rtoc)
+        else:
+            book_index = render_index('', '', '', rtoc)
         with open('index.html', 'w') as f:
             f.write(book_index.encode('utf-8'))
+
+
+def __get_book_conf(book):
+    if book:
+        with open(book, 'r') as f:
+            bookinfo = json.load(f)
+            print bookinfo
+        return bookinfo
+    return None 
 
 
 def __get_htmlfilename(path):

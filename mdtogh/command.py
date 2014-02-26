@@ -57,7 +57,7 @@ def main(argv=None):
 	json.dump(args, sys.stdout)
 
     #try:
-	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['book'], args['--offline'], args['--refresh'], args['--file_reg'])
+	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--book'], args['--offline'], args['--refresh'], args['--file_reg'])
 	return 0
     #except ValueError as e:
     #    print "Error: ", e

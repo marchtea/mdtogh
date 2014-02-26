@@ -120,12 +120,14 @@
   <div class="file-box">
 	<div class="content">
 		<div id="main">
-			<h1>{{ booktitle|safe }}</h1>
+			{% if booktitle -%}
+				<h1>{{ booktitle|safe }}</h1>
+			{%- endif %}
 			{% if coverimage -%}
-			<img style="float:right;margin: -20px 40px 0 40px;" src="{{ coverimage }}" width="118" height="157">
+				<img style="float:right;margin: -20px 40px 0 40px;" src="{{ coverimage }}" width="118" height="157">
 			{%- endif %}
 			{% if description %}
-			<p>{{ description }}</p>
+				<p>{{ description }}</p>
 			{% endif %}
 			{{ toc }}
 		</div>
