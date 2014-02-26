@@ -13,145 +13,141 @@ import codecs
 import json
 
 def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
-    if len(paths) == 0:
-        paths = ['.']
+	if len(paths) == 0:
+		paths = ['.']
 
-    #Get style file
-    styles, style_paths = get_style(cache_path, refresh)
-    #compile file reg exp
-    file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
-    file_reg = re.compile(file_reg, re.I)
+	#Get style file
+	styles, style_paths = get_style(cache_path, refresh)
+	#compile file reg exp
+	file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
+	file_reg = re.compile(file_reg, re.I)
 
-    render_flist = []
+	render_flist = []
 
-    for path in paths:
-        if not os.path.exists(path):
-            print "File not found: " + path
-            continue
-        #TODO:
-        #    add recursive support
-        if os.path.isdir(path):
-            path_files = os.listdir(path)
-            path_files = [os.path.join(path, f) for f in path_files]
-            render_flist.extend([f for f in path_files if os.path.isfile(f) and file_reg.search(f)])
-        elif os.path.isfile(path):
-            render_flist.append(path)
-        else:
-            raise ValueError('Not supported file: ' + path)
+	for path in paths:
+		if not os.path.exists(path):
+			print "File not found: " + path
+			continue
+		#TODO:
+		#    add recursive support
+		if os.path.isdir(path):
+			path_files = os.listdir(path)
+			path_files = [os.path.join(path, f) for f in path_files]
+			render_flist.extend([f for f in path_files if os.path.isfile(f) and file_reg.search(f)])
+		elif os.path.isfile(path):
+			render_flist.append(path)
+		else:
+			raise ValueError('Not supported file: ' + path)
     
-    print "in render_flist"
-    for f in render_flist:
-       print f
+	#print "in render_flist"
+	#for f in render_flist:
+	#   print f
 
-    contents = []
-    tocs = []
+	contents = []
+	tocs = []
 
-    #get all file rendered using github api or offline renderer
-    #Also, get toc
-    for f in render_flist:
-        try:
+	#get all file rendered using github api or offline renderer
+	#Also, get toc
+	for f in render_flist:
             content, toc = render_content(f, gfm, username, password, needtoc, offline)
             htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
             tocs.extend(__process_toc(toc, htmlname))
 
             print "done."
-        except RuntimeError as ex:
-           print "Error: ", ex
 
-    if needtoc:
-        rtoc = render_toc(tocs)
+	if needtoc:
+		rtoc = render_toc(tocs)
 
-        ##after render toc, we render index
-        bookinfo = __get_book_conf(book)
-        print type(bookinfo)
-        if bookinfo:
-            book_index = render_index(bookinfo['title'], bookinfo['coverimage'], bookinfo['description'], rtoc)
-        else:
-            book_index = render_index('', '', '', rtoc)
-        with open('index.html', 'w') as f:
-            f.write(book_index.encode('utf-8'))
-    else:
-        rtoc = None
+		##after render toc, we render index
+		bookinfo = __get_book_conf(book)
+		if bookinfo:
+			book_index = render_index(bookinfo['title'], bookinfo['coverimage'], bookinfo['description'], rtoc)
+		else:
+			book_index = render_index('', '', '', rtoc)
+		with open('index.html', 'w') as f:
+			f.write(book_index.encode('utf-8'))
+	else:
+		rtoc = None
 
     #After get all file rendered, render them with template & save into files
-    for i in range(len(contents)):
-        p = contents[i - 1][0] if i > 0 else None 
-        n = contents[i + 1][0] if i + 1 != len(contents) else None
+	for i in range(len(contents)):
+		p = contents[i - 1][0] if i > 0 else None 
+		n = contents[i + 1][0] if i + 1 != len(contents) else None
 
-        rendered = render_with_template('', contents[i][1], rtoc, p, n, css, rlcss, needtoc, styles, style_paths)
-        with open(contents[i][0], 'w') as f:
-            f.write(rendered.encode('utf-8'))
+		rendered = render_with_template('', contents[i][1], rtoc, p, n, css, rlcss, needtoc, styles, style_paths)
+		with open(contents[i][0], 'w') as f:
+			f.write(rendered.encode('utf-8'))
 
 
 
 def __get_book_conf(book):
-    if book:
-        with open(book, 'r') as f:
-            bookinfo = json.load(f)
-            print bookinfo
-        return bookinfo
-    return None 
+	if book:
+		with open(book, 'r') as f:
+			bookinfo = json.load(f)
+		return bookinfo
+	return None 
 
 
 def __get_htmlfilename(path):
-    basename = os.path.basename(path)
-    filename = re.split('\.(markdown|md|)', basename)[0]
-    return filename + '.html'
+	basename = os.path.basename(path)
+	filename = re.split('\.(markdown|md|)', basename)[0]
+	return filename + '.html'
 
 
 def __process_toc(toc, htmlname):
-    ##process toc, add htmlname into link
-    for header in toc:
-        header[2] = htmlname + header[2]
-    return toc
+	##process toc, add htmlname into link
+	for header in toc:
+		header[2] = htmlname + header[2]
+	return toc
 
 
 
 def _get_cached_style_files(cache_path):
-    """Gets the URLs of the cached styles."""
-    cached_styles = os.listdir(cache_path)
-    return [os.path.join(cache_path, style) for style in cached_styles]
+	"""Gets the URLs of the cached styles."""
+	cached_styles = os.listdir(cache_path)
+	return [os.path.join(cache_path, style) for style in cached_styles]
 
 
 def _cache_style(urls, cache_path):
-    """Fetches the given URLs and caches their contents in the given directory."""
-    for url in urls:
-        basename = url.rsplit('/', 1)[-1]
-        print 'Download css file: ', basename, '...',
-        file.flush(sys.stdout)
-        filename = os.path.join(cache_path, basename)
-        contents = requests.get(url).text
-        with open(filename, 'w') as f:
-            f.write(contents.encode('utf-8'))
-        print 'done'
-        file.flush(sys.stdout)
+	"""Fetches the given URLs and caches their contents in the given directory."""
+	for url in urls:
+		basename = url.rsplit('/', 1)[-1]
+		print 'Download css file: ', basename, '...',
+		file.flush(sys.stdout)
+		filename = os.path.join(cache_path, basename)
+		contents = requests.get(url).text
+		with open(filename, 'w') as f:
+			f.write(contents.encode('utf-8'))
+		print 'done'
+		file.flush(sys.stdout)
 
 
 def _get_style_urls(cache_path):
-    '''Get css urls from settings.STYLE_URLS_SOURCE
-        if css files are already cached, return []
-    '''
-    try:
-        cached = _get_cached_style_files(cache_path)
-        if not cached:
-            # Find css url
-            print "Fetching css url from ", settings.STYLE_URLS_SOURCE,
-            file.flush(sys.stdout)
-            r = requests.get(settings.STYLE_URLS_SOURCE)
-            if not 200 <= r.status_code < 300:
-                print ' * Warning: retrieving styles gave status code', r.status_code
-            urls = re.findall(settings.STYLE_URLS_RE, r.text)
-            print "......done"
-            print urls
-            return urls
+	'''Get css urls from settings.STYLE_URLS_SOURCE
+		if css files are already cached, return []
+	'''
+	try:
+		cached = _get_cached_style_files(cache_path)
+		if not cached:
+			# Find css url
+			print "Fetching css url from ", settings.STYLE_URLS_SOURCE,
+			file.flush(sys.stdout)
+			r = requests.get(settings.STYLE_URLS_SOURCE)
+			if not 200 <= r.status_code < 300:
+				print ' * Warning: retrieving styles gave status code', r.status_code
+				raise RuntimeError('Get css file failed')
+			urls = re.findall(settings.STYLE_URLS_RE, r.text)
+			print "......done"
+			print urls
+			return urls
 
-            ##cache style files 
-            #_cache_style(urls, cache_path)
-            #cached = _get_cached_style_files(cache_path)
-    except Exception as ex:
-        print '* Error: Retrive style error:', str(ex)
-    return []
+			##cache style files 
+			#_cache_style(urls, cache_path)
+			#cached = _get_cached_style_files(cache_path)
+	except Exception as ex:
+		print '* Error: Retrive style error:', str(ex)
+	return []
 
 
 def _get_style_contents(urls, cache_path):
@@ -181,7 +177,6 @@ def get_style(cache_path, refresh):
     '''
     if cache_path is None:
         cache_path = getDefaultPath()
-    
 
     cache_path = os.path.join(cache_path, 'style_cache')
     

@@ -55,7 +55,6 @@ def find_package(import_name):
 
 
 def getDefaultPath():
-    print "Name: ", __name__
     prefix, package_path = find_package(__name__)
     if prefix is None:
         return package_path

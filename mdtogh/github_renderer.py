@@ -25,7 +25,5 @@ def github_render_content(text, gfm=False, context=None, username=None, password
 			message = r.json()['message']
 		except:
 			message = r.text
-	print r.headers
-	print r.encoding
 
 	return r.text, message

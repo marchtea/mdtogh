@@ -6,7 +6,6 @@ import os.path
 
 ##for jinjia2
 ##Get template to render
-##TODO: add custom template support
 env = Environment(loader=PackageLoader('mdtogh', 'templates'),
 		extensions=['jinja2.ext.do', 'jinja2.ext.loopcontrols'])
 content_template = env.get_template('content.html')
@@ -51,7 +50,9 @@ def render_with_template(title, content, toc, prevfile, nextfile, css, rlcss, ne
 		style_paths[:] = []
 
 	return content_template.render(content=content, filetitle=title,
-			style_paths=style_paths, styles=styles)
+			style_paths=style_paths, styles=styles, toc = toc, 
+			prevfile = prevfile, nextfile = nextfile)
+
 
 def render_toc(tocs):
 	return toc_template.render(tocs = tocs)
@@ -61,19 +62,3 @@ def render_index(title, cover, description, toc):
 	return index_template.render(booktitle = title, coverimage = cover,
 			description = description, toc = toc)
 
-#def render_file(filename, css, rlcss, gfm, username, password, toc, offline, styles, style_paths):
-	#content, toc = render_content(filename, gfm, username, password, toc, offline)
-
-	##if using css, then clear styles
-	##otherwise, clear style_paths
-	#if css:
-		#styles[:] = []
-		#if rlcss:
-			#style_paths = [os.path.relpath(path) for path in style_paths]
-	#else:
-		#style_paths[:] = []
-
-	#print "start render..."	
-
-	#return template.render(content=content, filename=filename,
-			#style_paths=style_paths, styles=styles), toc
