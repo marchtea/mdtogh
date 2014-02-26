@@ -59,17 +59,7 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
         except RuntimeError as ex:
            print "Error: ", ex
 
-    #After get all file rendered, render them with template & save into files
-    for i in range(len(contents)):
-        p = contents[i - 1][0] if i > 0 else None 
-        n = contents[i + 1][0] if i + 1 != len(contents) else None
-
-        rendered = render_with_template('', contents[i][1], toc, p, n, css, rlcss, needtoc, styles, style_paths)
-        with open(contents[i][0], 'w') as f:
-            f.write(rendered.encode('utf-8'))
-
     if needtoc:
-        print tocs
         rtoc = render_toc(tocs)
 
         ##after render toc, we render index
@@ -81,6 +71,18 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
             book_index = render_index('', '', '', rtoc)
         with open('index.html', 'w') as f:
             f.write(book_index.encode('utf-8'))
+    else:
+        rtoc = None
+
+    #After get all file rendered, render them with template & save into files
+    for i in range(len(contents)):
+        p = contents[i - 1][0] if i > 0 else None 
+        n = contents[i + 1][0] if i + 1 != len(contents) else None
+
+        rendered = render_with_template('', contents[i][1], rtoc, p, n, css, rlcss, needtoc, styles, style_paths)
+        with open(contents[i][0], 'w') as f:
+            f.write(rendered.encode('utf-8'))
+
 
 
 def __get_book_conf(book):
