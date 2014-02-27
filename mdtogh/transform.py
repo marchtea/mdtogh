@@ -12,7 +12,7 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
 	if len(paths) == 0:
 		paths = ['.']
 
@@ -76,7 +76,7 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
 		p = contents[i - 1][0] if i > 0 else None 
 		n = contents[i + 1][0] if i + 1 != len(contents) else None
 
-		rendered = render_with_template('', contents[i][1], rtoc, p, n, css, rlcss, needtoc, styles, style_paths)
+		rendered = render_with_template('', contents[i][1], rtoc, p, n, css, abscss, needtoc, styles, style_paths)
 		with open(contents[i][0], 'w') as f:
 			f.write(rendered.encode('utf-8'))
 

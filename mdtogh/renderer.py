@@ -36,7 +36,7 @@ def render_content(filename, gfm, username, password, toc, offline):
 	return content, gentoc
 
 
-def render_with_template(title, content, toc, prevfile, nextfile, css, rlcss, needtoc, styles, style_paths):
+def render_with_template(title, content, toc, prevfile, nextfile, css, abscss, needtoc, styles, style_paths):
 	'''
 		render file using template
 	'''
@@ -44,7 +44,7 @@ def render_with_template(title, content, toc, prevfile, nextfile, css, rlcss, ne
 	#otherwise, clear style_paths
 	if css:
 		styles[:] = []
-		if rlcss:
+		if not abscss:
 			style_paths = [os.path.relpath(path) for path in style_paths]
 	else:
 		style_paths[:] = []

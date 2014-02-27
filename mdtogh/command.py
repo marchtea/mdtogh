@@ -16,7 +16,7 @@ Where:
 Options:
   --cache_path=<path> path to store style file cache
   --css		      when NOT set, css contents are generate into html
-  --rlcss	      link css with relative path, use only with --css is set 
+  --abscss	      link css with absolute path, use only with --css is set 
   --gfm               Use GitHub-Flavored Markdown, e.g. comments or issues
   --context=<repo>    The repository context, only taken into account with --gfm
   --user=<username>   GitHub username for API authentication
@@ -56,7 +56,7 @@ def main(argv=None):
 	#json.dump(args, sys.stdout)
 
     try:
-	transform(args['<path>'], args['--cache_path'], args['--css'], args['--rlcss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--book'], args['--offline'], args['--refresh'], args['--file_reg'])
+	transform(args['<path>'], args['--cache_path'], args['--css'], args['--abscss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--book'], args['--offline'], args['--refresh'], args['--file_reg'])
 	return 0
     except ValueError as e:
        print "Error: ", e
