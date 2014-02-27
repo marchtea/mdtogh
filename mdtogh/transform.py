@@ -19,8 +19,9 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
 	#Get style file
 	styles, style_paths = get_style(cache_path, refresh)
 	#compile file reg exp
+        print 'reg: ', file_reg
 	file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
-	file_reg = re.compile(file_reg, re.I)
+	file_reg = re.compile(file_reg, re.I|re.U)
 
 	render_flist = []
 
@@ -32,8 +33,8 @@ def transform(paths = None, cache_path = None, css = False, rlcss = False, gfm =
 		#    add recursive support
 		if os.path.isdir(path):
 			path_files = os.listdir(path)
-			path_files = [os.path.join(path, f) for f in path_files]
-			render_flist.extend([f for f in path_files if os.path.isfile(f) and file_reg.search(f)])
+			path_files = [os.path.join(path, f) for f in path_files if file_reg.search(f)]
+			render_flist.extend([f for f in path_files if os.path.isfile(f)])
 		elif os.path.isfile(path):
 			render_flist.append(path)
 		else:
