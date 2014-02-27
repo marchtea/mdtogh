@@ -8,7 +8,7 @@ def get_toc(filename):
 	input_file = codecs.open(filename, mode='r', encoding='utf-8')
 	text = input_file.read()
 	input_file.close()
-	md = markdown.Markdown(extensions=['toc'], extension_configs={'toc': [('slugify', github_link_renderer)]})
+	md = markdown.Markdown(extensions=['toc', 'fenced_code'], extension_configs={'toc': [('slugify', github_link_renderer)]})
 	md.convert(text)
 
 	#convert to toc list
