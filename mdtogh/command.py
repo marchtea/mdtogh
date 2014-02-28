@@ -32,7 +32,7 @@ Options:
 Notice:
 	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in a peroid.
 	If you need to generate more than that, please set --user & --pass.
-	Also, --user & --pass is send with plain text.
+	Also, --user & --pass is send via plain text.
 """
 
 import sys
