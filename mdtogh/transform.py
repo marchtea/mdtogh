@@ -12,14 +12,13 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
 	if len(paths) == 0:
 		paths = ['.']
 
 	#Get style file
-	styles, style_paths = get_style(cache_path, refresh)
+	styles, style_paths = get_style(cache_path, system_css, refresh)
 	#compile file reg exp
-        print 'reg: ', file_reg
 	file_reg = '\.(md|markdown)$' if file_reg is None else file_reg
 	file_reg = re.compile(file_reg, re.I|re.U)
 
@@ -111,44 +110,41 @@ def _get_cached_style_files(cache_path):
 
 
 def _cache_style(urls, cache_path):
-	"""Fetches the given URLs and caches their contents in the given directory."""
-	for url in urls:
-		basename = url.rsplit('/', 1)[-1]
-		print 'Download css file: ', basename, '...',
-		file.flush(sys.stdout)
-		filename = os.path.join(cache_path, basename)
-		contents = requests.get(url).text
-		with open(filename, 'w') as f:
-			f.write(contents.encode('utf-8'))
-		print 'done'
-		file.flush(sys.stdout)
+    """Fetches the given URLs and caches their contents in the given directory."""
+    for url in urls:
+        basename = url.rsplit('/', 1)[-1]
+        print '\tDownload css file: ', basename, '...',
+        file.flush(sys.stdout)
+        filename = os.path.join(cache_path, basename)
+        contents = requests.get(url).text
+        with open(filename, 'w') as f:
+            f.write(contents.encode('utf-8'))
+        print 'done'
+        file.flush(sys.stdout)
 
 
 def _get_style_urls(cache_path):
-	'''Get css urls from settings.STYLE_URLS_SOURCE
-		if css files are already cached, return []
-	'''
-	try:
-		cached = _get_cached_style_files(cache_path)
-		if not cached:
-			# Find css url
-			print "Fetching css url from ", settings.STYLE_URLS_SOURCE,
-			file.flush(sys.stdout)
-			r = requests.get(settings.STYLE_URLS_SOURCE)
-			if not 200 <= r.status_code < 300:
-				print ' * Warning: retrieving styles gave status code', r.status_code
-				raise RuntimeError('Get css file failed')
-			urls = re.findall(settings.STYLE_URLS_RE, r.text)
-			print "......done"
-			print urls
-			return urls
+    '''Get css urls from settings.STYLE_URLS_SOURCE
+        if css files are already cached, return []
+    '''
+    try:
+        cached = _get_cached_style_files(cache_path)
+        if not cached:
+            # Find css url
+            print "Github css files are not cached. Download First"
+            print "Fetching css url from ", settings.STYLE_URLS_SOURCE,
+            file.flush(sys.stdout)
+            r = requests.get(settings.STYLE_URLS_SOURCE)
+            if not 200 <= r.status_code < 300:
+                print ' * Warning: retrieving styles gave status code', r.status_code
+                raise RuntimeError('Get css file failed')
+            urls = re.findall(settings.STYLE_URLS_RE, r.text)
+            print "......done"
+            return urls
 
-			##cache style files 
-			#_cache_style(urls, cache_path)
-			#cached = _get_cached_style_files(cache_path)
-	except Exception as ex:
-		print '* Error: Retrive style error:', str(ex)
-	return []
+    except Exception as ex:
+        print '* Error: Retrive style error:', str(ex)
+    return []
 
 
 def _get_style_contents(urls, cache_path):
@@ -172,11 +168,13 @@ def _get_style_contents(urls, cache_path):
     return styles, file_paths
 
 
-def get_style(cache_path, refresh):
+def get_style(cache_path, system_css, refresh):
     '''Get github's css, render to html file later
         return style content
     '''
     if cache_path is None:
+        cache_path = os.path.curdir
+    if system_css:
         cache_path = getDefaultPath()
 
     cache_path = os.path.join(cache_path, 'style_cache')

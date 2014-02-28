@@ -14,9 +14,10 @@ Where:
   <path> is a file or a directory to render, [default: '.']
 
 Options:
-  --cache_path=<path> path to store style file cache
-  --css		      when NOT set, css contents are generate into html
-  --abscss	      link css with absolute path, use only with --css is set 
+  --cache_path=<path> path to store style file cache, default to current directory
+  --system_css		  using system wide css.
+  --css				  when NOT set, css contents are generate into html
+  --abscss			  link css with absolute path, use only with --css is set 
   --gfm               Use GitHub-Flavored Markdown, e.g. comments or issues
   --context=<repo>    The repository context, only taken into account with --gfm
   --user=<username>   GitHub username for API authentication
@@ -56,7 +57,7 @@ def main(argv=None):
 	#json.dump(args, sys.stdout)
 
     try:
-	transform(args['<path>'], args['--cache_path'], args['--css'], args['--abscss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--book'], args['--offline'], args['--refresh'], args['--file_reg'])
+	transform(args['<path>'], args['--cache_path'], args['--system_css'], args['--css'], args['--abscss'], args['--gfm'], args['--user'],args['--pass'], args['--toc'], args['--book'], args['--offline'], args['--refresh'], args['--file_reg'])
 	return 0
     except ValueError as e:
        print "Error: ", e
