@@ -15,7 +15,7 @@ def read(fname):
 
 setup(
     name='mdtogh',
-    version='1.0.0',
+    version='0.0.1',
     packages=find_packages(),
     #install requirements
     install_requires=read('requirements.txt'),

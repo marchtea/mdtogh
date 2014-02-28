@@ -14,18 +14,18 @@ Where:
   <path> is a file or a directory to render, [default: '.']
 
 Options:
-  --cache_path=<path> path to store style file cache, default to current directory
-  --system_css		  using system wide css.
-  --css				  when NOT set, css contents are generate into html
-  --abscss			  link css with absolute path, use only with --css is set 
-  --gfm               Use GitHub-Flavored Markdown, e.g. comments or issues
-  --context=<repo>    The repository context, only taken into account with --gfm
-  --user=<username>   GitHub username for API authentication
-  --pass=<password>   GitHub password for API authentication
-  --toc               Generate table of contents
-  --book=<book.json>  Generate toc with book info, only used when --toc is set
-  --offline           Use offline renderer
-  --refresh           clear cached styles & refetch them
+  --cache_path=<path>  path to store style file cache, default to current directory
+  --system_css         using system wide css.
+  --css                when NOT set, css contents are generate into html
+  --abscss             link css with absolute path, use only with --css is set 
+  --gfm                Use GitHub-Flavored Markdown, e.g. comments or issues
+  --context=<repo>     The repository context, only taken into account with --gfm
+  --user=<username>    GitHub username for API authentication
+  --pass=<password>    GitHub password for API authentication
+  --toc                Generate table of contents
+  --book=<book.json>   Generate toc with book info, only used when --toc is set
+  --offline            Use offline renderer
+  --refresh            clear cached styles & refetch them
   --file_reg=<reg_exp> when path is a directory, using reg_exp to get file, this reg_exp must obey python's rules
 		       if not set, mdtogh will get all files end with .md or .markdown, Notice: this is case-insensitive.
 
