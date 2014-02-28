@@ -43,12 +43,15 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
 	#for f in render_flist:
 	#   print f
 
+        print len(render_flist), " files in render list..." 
+
 	contents = []
 	tocs = []
 
 	#get all file rendered using github api or offline renderer
 	#Also, get toc
-	for f in render_flist:
+	for i, f in enumerate(render_flist):
+            print i+1, "/", len(render_flist), ": ",
             content, toc = render_content(f, gfm, username, password, needtoc, offline)
             htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
@@ -180,6 +183,8 @@ def get_style(cache_path, system_css, refresh):
         cache_path = os.path.curdir
     if system_css:
         cache_path = getDefaultPath()
+
+    cache_path = os.path.expanduser(cache_path)
 
     cache_path = os.path.join(cache_path, 'style_cache')
     

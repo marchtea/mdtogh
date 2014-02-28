@@ -16,7 +16,7 @@ def render_content(filename, gfm, username, password, toc, offline):
 	'''render one file
 		return: content, toc	
 	'''
-	print 'Rendering: ', filename
+	print 'Rendering: ', filename,
 	if offline:
 		#offline_renderer, using get_toc to get toc
 		content = ''
