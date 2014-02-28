@@ -52,7 +52,8 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
             content, toc = render_content(f, gfm, username, password, needtoc, offline)
             htmlname = __get_htmlfilename(f)
             contents.append([htmlname, content])
-            tocs.extend(__process_toc(toc, htmlname))
+            if needtoc:
+                tocs.extend(__process_toc(toc, htmlname))
 
             print "done."
 

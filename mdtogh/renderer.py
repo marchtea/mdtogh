@@ -50,7 +50,7 @@ def render_with_template(title, content, toc, prevfile, nextfile, css, abscss, n
 		style_paths[:] = []
 
 	return content_template.render(content=content, filetitle=title,
-			style_paths=style_paths, styles=styles, toc = toc, 
+			style_paths=style_paths, styles=styles, toc = toc, needtoc = needtoc, 
 			prevfile = prevfile, nextfile = nextfile)
 
 
