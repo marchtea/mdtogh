@@ -83,11 +83,14 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
 
 
 def __get_book_conf(book):
-	if book:
-		with open(book, 'r') as f:
-			bookinfo = json.load(f)
-		return bookinfo
-	return None 
+    if book:
+        book = os.path.expanduser(book)
+        if not os.path.exists(book):
+            raise RuntimeError(book+' not exists')
+        with open(book, 'r') as f:
+            bookinfo = json.load(f)
+        return bookinfo
+    return None 
 
 
 def __get_htmlfilename(path):
