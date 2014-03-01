@@ -1,16 +1,49 @@
 mdtogh
 ---
 
-mdtogh is an easy tool for you to transform your markdown files into html with style look exactly like github does
+mdtogh is an easy tool for you to transform your markdown files into html with
+styles look exactly like github does.
 
+Features
+===========
+mdtogh can transform your markdown files into html.With features belows
 
-``````````````````````
+- toc support
+- index.html for your book
+- next/prev files link
+- file regexp to select your md files
+- custom template(still working)
+- offline renderer(still working)
 
-::
+Installation
+============
+
+From pypi::
 
     $ pip install mdtogh 
+
+With setup.py::
+	
+	$ python setup.py install
+
+Maybe you will need add sudo
+
+Usage
+===========
+
+Generate all md files in current directory::
     $ cd mdfiles
     $ mdtogh
+
+Generate files with file reg support::
+	$ cd mdfiles
+	$ mdtogh --file_reg='^\d.+\.md'
+
+Generate files with toc support::
+	$cd mdfiles
+	$mdtogh --toc --file_reg='^\d.+\.md'
+
+Generate files with additional 
 
 
 Links

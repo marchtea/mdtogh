@@ -30,9 +30,9 @@ Options:
 		       if not set, mdtogh will get all files end with .md or .markdown, Notice: this is case-insensitive.
 
 Notice:
-	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in a peroid.
+	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in an hour.
 	If you need to generate more than that, please set --user & --pass.
-	Also, --user & --pass are sended via plain text.
+	Also, --user & --pass are sended via https.
 """
 
 import sys
