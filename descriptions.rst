@@ -58,6 +58,7 @@ Usage
 Generate one or more files
 
 .. code-block:: bash
+
     $ cd mdfiles
 	$ mdtogh 01.md 02.md 03.md
 	
