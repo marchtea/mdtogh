@@ -38,9 +38,13 @@ Installation
 
 From `pypi`_
 
+.. code-block:: bash
+
     $ pip install mdtogh 
 
 Also, you can clone repo & install with setup.py.
+
+.. code-block:: bash
 
 	$ git clone https://github.com/marchtea/md_to_github_html.git
 	$ cd md_to_github_html
@@ -51,46 +55,63 @@ Also, you can clone repo & install with setup.py.
 Usage
 ==================
 
-Generate one or more files::
+Generate one or more files
 
-	$ cd mdfiles
+.. code-block:: bash
+    $ cd mdfiles
 	$ mdtogh 01.md 02.md 03.md
 	
-Generate all md files in current directory::
+Generate all md files in current directory
+
+.. code-block:: bash
 
     $ cd mdfiles
     $ mdtogh
     
-Generate md files in other directory::
+Generate md files in other directory
+
+.. code-block:: bash
 
 	$ mdtogh ../mdfiles
 
-Generate files with file reg support::
+Generate files with file reg support
+
+.. code-block:: bash
 
 	$ cd mdfiles
 	$ mdtogh --file_reg='^\d.+\.md'
 
-Generate files with toc support::
+Generate files with toc support
+
+.. code-block:: bash
 
 	$cd mdfiles
 	$ mdtogh --toc --file_reg='^\d.+\.md'
 
-Generate files with additional book info::
+Generate files with additional book info
+
+.. code-block:: bash
 
 	$cd mdfiles
 	$ mdtogh --toc --book='book.json'
 	
 The format of `book.json` is given below.
 
-**Recommanded** options to `generate book`::
+**Recommanded** options to `generate book`
+
+.. code-block:: bash
 
 	$ mdtogh --css --toc --book='book.json' --file_reg='your reg exp'
 
-**Recommanded** options to generate `several files`::
+**Recommanded** options to generate `several files`
+
+.. code-block:: bash
 
 	$ mdtogh 01.md 02.md
 
-For more options::
+For more options
+
+.. code-block:: bash
 
 	mdtogh -h
 	
