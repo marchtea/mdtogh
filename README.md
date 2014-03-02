@@ -132,9 +132,9 @@ Any help will be **appreciated**.
 
 ##Links
 
-* [grip](http://github.com/marchtea/mdtogh)
+* [grip](https://github.com/joeyespo/grip)
 * [github markdown api](http://developer.github.com/v3/markdown/)
 
 ##Thanks
-Special thanks to [grip](http://github.com/marchtea/mdtogh). Without its excellent work, this tools can't be done.
+Special thanks to [grip](https://github.com/joeyespo/grip). Without its excellent work, this tools can't be done.
 
