@@ -7,7 +7,7 @@ Motivation
 
 Basically, You may want to convert md files into Html looks exactly like github does.
 
-Maybe you would try `pandoc`_, but html it generates looks **not** very well(~~Just my own opinion~~).
+Maybe you would try `pandoc`_, but html it generates looks **not** very well.
 
 So, I start writing this small tool, inspired by `grip`_
 
@@ -50,7 +50,7 @@ Also, you can clone repo & install with setup.py.
 	$ cd md_to_github_html
 	$ python setup.py install
 
-**Maybe you will need add `sudo`**
+**Maybe you will need add sudo**
 
 Usage
 ==================
@@ -95,15 +95,15 @@ Generate files with additional book info
 	$cd mdfiles
 	$ mdtogh --toc --book='book.json'
 	
-The format of `book.json` is given below.
+The format of book.json is given below.
 
-**Recommanded** options to `generate book`
+**Recommanded** options to generate book
 
 .. code-block:: bash
 
 	$ mdtogh --css --toc --book='book.json' --file_reg='your reg exp'
 
-**Recommanded** options to generate `several files`
+**Recommanded** options to generate several files
 
 .. code-block:: bash
 
@@ -121,20 +121,23 @@ Something You May Notice
 As to generate files exactly like github does, the easiest way is to use
 `api`_ if offers. But it has its own `limits`_.
 
--	60 for anonymous requests an hour
--	5000 for requests using `Basic Authentication`
+- 60 for anonymous requests an hour
+- 5000 for requests using Basic Authentication
 
-So, you may using `--user` & `--pass` options
+So, you may using --user & --pass options
+
+.. code-block:: bash
 
 	$ mdtogh --user='your_github_username' --pass='your login password'
 	
-Your info are sended through `https` which is safe. `mdtogh` will not save any your info.
+Your info are sended through https which is safe. mdtogh will not save any your info.
 
 
 book.json
 ========================
 
 .. code-block:: javascript 
+
     {
         "title": "Demo book",
         "description": "This is a book.",
@@ -143,24 +146,24 @@ book.json
 
 TODO
 ===================
-`mdtogh` is still on developing.
+mdtogh is still on developing.
 
 Features is developing or will be add later.
 
--	max toc level
--	support recursive options.
--	custom html template
--	add toc in content.html
--	show ratelimit-remaining after generate complete
--	offline renderer
+- max toc level
+- support recursive options.
+- custom html template
+- add toc in content.html
+- show ratelimit-remaining after generate complete
+- offline renderer
 
 Contibuting
 ===============
 
 Any help will be **appreciated**.
 
--	open issues if you find any questions
--	complete one in TODO list
+- open issues if you find any questions
+- complete one in TODO list
 
 Links
 =====================
@@ -182,5 +185,4 @@ Special thanks to `grip`_. Without its excellent work, this tools can't be done.
 .. _pandoc: http://johnmacfarlane.net/pandoc/index.html
 .. _The-Art-Of-Programming-By-July: https://github.com/julycoding/The-Art-Of-Programming-By-July
 .. _taop.marchtea.com: http://taop.marchtea.com
-
 .. _Github repo: http://github.com/marchtea/mdtogh
