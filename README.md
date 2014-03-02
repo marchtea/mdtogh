@@ -93,13 +93,13 @@ For more options:
 As to generate files exactly like github does, the easiest way is to use [api](http://developer.github.com/v3/markdown/) if offers. But it has its own [limits](http://developer.github.com/v3/#rate-limiting).
 
 *	60 for anonymous requests an hour
-*	5000 for requests using `Basic Authentication`
+*	5000 for requests using `Basic Authentication` an hour
 
 So, you may using `--user` & `--pass` options
 
 	$ mdtogh --user='your_github_username' --pass='your login password'
 	
-Your info are sended through `https` which is safe. `mdtogh` will not save any your info.
+Your info is sent through `https` which is safe. `mdtogh` will not save any of it.
 
 
 ##book.json
@@ -115,7 +115,7 @@ Your info are sended through `https` which is safe. `mdtogh` will not save any y
 ##TODO
 `mdtogh` is still on developing.
 
-Features is developing or will be add later.
+Features are developing or will be add later.
 
 *	max toc level
 *	support recursive options.
@@ -125,10 +125,12 @@ Features is developing or will be add later.
 *	offline renderer
 
 ##Contibuting
-Any help will be **appreciated**.
+Any **help** will be **appreciated**.
 
-*	open issues if you find any questions
-*	complete one in TODO list
+*	open issue if you find any questions
+*	complete tasks in TODO list
+*	add features you like
+*	feel free to open pull request
 
 ##Links
 
@@ -136,5 +138,5 @@ Any help will be **appreciated**.
 * [github markdown api](http://developer.github.com/v3/markdown/)
 
 ##Thanks
-Special thanks to [grip](https://github.com/joeyespo/grip). Without its excellent work, this tools can't be done.
+Special thanks to [grip](https://github.com/joeyespo/grip). Without its excellent work, this tool can't be done.
 
