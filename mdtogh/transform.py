@@ -101,7 +101,7 @@ def __get_book_conf(book):
 
 def __get_htmlfilename(path):
     basename = os.path.basename(path)
-    filename = re.split('\.(markdown|md|)', basename)[0]
+    filename = re.split('\.(markdown|md)', basename)[0]
     return filename + '.html'
 
 
