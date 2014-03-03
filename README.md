@@ -136,6 +136,11 @@ Any **help** will be **appreciated**.
 * [grip](https://github.com/joeyespo/grip)
 * [github markdown api](http://developer.github.com/v3/markdown/)
 
+##Change Log
+
+*	2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
+*	2014/3/1 0.0.1 first release
+
 ##Thanks
 Special thanks to [grip](https://github.com/joeyespo/grip). Without its excellent work, this tool can't be done.
 

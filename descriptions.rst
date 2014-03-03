@@ -174,6 +174,12 @@ Links
 - `grip`_
 - `github markdown api`_
 
+Change Log
+=====================
+
+- 2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
+- 2014/3/1 0.0.1 first release
+
 Thanks
 ==========
 
