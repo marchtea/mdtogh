@@ -64,14 +64,14 @@ Generate files with file reg support:
 	$ cd mdfiles
 	$ mdtogh --file_reg='^\d.+\.md'
 
-Generate files with toc support:
+Generate files with toc & toc_depth support:
 
-	$cd mdfiles
-	$ mdtogh --toc --file_reg='^\d.+\.md'
+	$ cd mdfiles
+	$ mdtogh --toc --toc_depth=2 --file_reg='^\d.+\.md'
 
 Generate files with additional book info.
 
-	$cd mdfiles
+	$ cd mdfiles
 	$ mdtogh --toc --book='book.json'
 	
 The format of `book.json` is given below.
@@ -117,7 +117,6 @@ Your info is sent through `https` which is safe. `mdtogh` will not save any of i
 
 Features are developing or will be add later.
 
-*	max toc level
 *	support recursive options.
 *	custom html template
 *	add toc in content.html
