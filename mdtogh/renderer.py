@@ -3,6 +3,7 @@ from .toc import get_toc
 from .toc import get_github_toc
 from jinja2 import Environment, PackageLoader
 import os.path
+import sys
 
 ##for jinjia2
 ##Get template to render
@@ -17,6 +18,7 @@ def render_content(filename, gfm, username, password, toc, offline):
 		return: content, toc	
 	'''
 	print 'Rendering: ', filename,
+        file.flush(sys.stdout)
 	if offline:
 		#offline_renderer, using get_toc to get toc
 		content = ''
