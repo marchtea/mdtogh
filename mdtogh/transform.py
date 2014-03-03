@@ -12,7 +12,7 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, book = '', offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, refresh = False, file_reg = None):
     if len(paths) == 0:
         paths = ['.']
 
@@ -61,7 +61,7 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
         print "done."
 
     if needtoc:
-        rtoc = render_toc(tocs)
+        rtoc = render_toc(tocs, toc_depth)
 
         ##after render toc, we render index
         bookinfo = __get_book_conf(book)

@@ -56,8 +56,14 @@ def render_with_template(title, content, toc, prevfile, nextfile, css, abscss, n
 			prevfile = prevfile, nextfile = nextfile)
 
 
-def render_toc(tocs):
-	return toc_template.render(tocs = tocs)
+def render_toc(tocs, toc_depth):
+    if toc_depth is None:
+        toc_depth = '2'
+
+    if not toc_depth.isdigit():
+        raise ValueError('--toc-depth must be digit')
+
+    return toc_template.render(tocs = tocs, toc_depth = toc_depth)
 
 
 def render_index(title, cover, description, toc):

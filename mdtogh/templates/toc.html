@@ -5,6 +5,9 @@
 			{% set culevel = toc[0] %}
 			{% do ollevel.append(toc[0]) %}
 		{% elif toc[0] > culevel %}
+            {% if toc_depth and toc_depth < toc[0][1] %}
+                {% continue %}
+            {% endif %}
 			<ol>
 			{% set culevel = toc[0] %}
 			{% do ollevel.append(toc[0]) %}
