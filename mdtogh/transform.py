@@ -101,14 +101,14 @@ def __get_book_conf(book):
 
 def __get_htmlfilename(path):
     basename = os.path.basename(path)
-    filename = re.split('\.(markdown|md)', basename)[0]
-    return filename + '.html'
+    filename = re.split('\.(markdown|md)', basename, re.U)[0]
+    return unicode(filename + '.html', 'utf-8')
 
 
 def __process_toc(toc, htmlname):
     ##process toc, add htmlname into link
     for header in toc:
-            header[2] = htmlname + header[2]
+        header[2] = htmlname + header[2]
     return toc
 
 
