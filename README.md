@@ -138,6 +138,7 @@ Any **help** will be **appreciated**.
 
 ##Change Log
 
+*   2014/3/4 0.0.3 fix error leads by unicode filename
 *	2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
 *	2014/3/1 0.0.1 first release
 

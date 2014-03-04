@@ -15,7 +15,7 @@ if sys.argv[-1] == 'publish':
 
 setup(
     name='mdtogh',
-    version='0.0.1',
+    version='0.0.3',
     packages=find_packages(),
     #install requirements
     install_requires=open('requirements.txt').read(),
