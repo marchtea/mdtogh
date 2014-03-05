@@ -2,3 +2,5 @@ include descriptions.rst
 include README.md
 include requirements.txt
 
+graft mdtogh/templates
+global-exclude *~

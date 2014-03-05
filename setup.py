@@ -1,3 +1,6 @@
+import ez_setup
+ez_setup.use_setuptools()
+
 import os
 import sys
 from setuptools import setup, find_packages
@@ -15,13 +18,13 @@ def read(fname):
 
 setup(
     name='mdtogh',
-    version='0.0.4',
+    version='0.0.5',
     packages=find_packages(),
     #install requirements
     install_requires=read('requirements.txt'),
 
-    data_files=[('.', ['requirements.txt', 'descriptions.rst'])],
-    package_data={'': ['descriptions.rst', 'requirements.txt'], 'mdtogh': ['templates/*']},
+    package_data={'mdtogh': ['templates/*']},
+    include_package_data=True,
 
     entry_points={'console_scripts': ['mdtogh = mdtogh.command:main']},
 
