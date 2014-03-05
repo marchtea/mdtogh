@@ -8,19 +8,20 @@ if sys.argv[-1] == 'publish':
 
 
 
-#def read(fname):
-#    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
-#        return f.read()
+def read(fname):
+   with open(os.path.join(os.path.dirname(__file__), fname)) as f:
+       return f.read()
 
 
 setup(
     name='mdtogh',
-    version='0.0.3',
+    version='0.0.4',
     packages=find_packages(),
     #install requirements
-    install_requires=open('requirements.txt').read(),
+    install_requires=read('requirements.txt'),
 
-    package_data={'mdtogh': ['templates/*']},
+    data_files=[('.', ['requirements.txt', 'descriptions.rst'])],
+    package_data={'': ['descriptions.rst', 'requirements.txt'], 'mdtogh': ['templates/*']},
 
     entry_points={'console_scripts': ['mdtogh = mdtogh.command:main']},
 
@@ -29,7 +30,7 @@ setup(
     author='Summer Ruan',
     author_email='marchtea213@gmail.com',
     description='Transform markdown files into html with styles of github',
-    long_description=open('descriptions.rst').read(),
+    long_description=read('descriptions.rst'),
     url='http://github.com/marchtea/mdtogh',
     platforms='any',
 )
