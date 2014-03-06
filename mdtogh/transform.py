@@ -169,6 +169,8 @@ def _get_style_contents(urls, cache_path):
         if basename not in cached_styles:
             _cache_style([url], cache_path)
 
+    cached_styles = os.listdir(cache_path)
+
     for style in cached_styles:
         basename = style.rsplit('/', 1)[-1]
         css_path = os.path.join(cache_path, basename)
