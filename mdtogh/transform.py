@@ -4,6 +4,7 @@ from .renderer import render_with_template
 from .renderer import render_toc
 from .renderer import render_index
 from .util import getDefaultPath
+from datetime import datetime
 import settings 
 import requests
 import re
@@ -52,7 +53,7 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     #Also, get toc
     for i, f in enumerate(render_flist):
         print i+1, "/", len(render_flist), ": ",
-        content, toc = render_content(f, gfm, username, password, needtoc, offline)
+        content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline)
         htmlname = __get_htmlfilename(f)
         contents.append([htmlname, content])
         if needtoc:
@@ -75,7 +76,7 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     else:
         rtoc = None
 
-#After get all file rendered, render them with template & save into files
+    #After get all file rendered, render them with template & save into files
     for i in range(len(contents)):
         p = contents[i - 1][0] if i > 0 else None 
         n = contents[i + 1][0] if i + 1 != len(contents) else None
@@ -85,6 +86,9 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
             f.write(rendered.encode('utf-8'))
 
     print 'All finished'
+    if extradata:
+        print "Github API rate remains: ", extradata['x-ratelimit-remaining'], "/", extradata['x-ratelimit-limit'], "."
+        print "Reset at: ", datetime.fromtimestamp(float(extradata['x-ratelimit-reset']))
 
 
 
