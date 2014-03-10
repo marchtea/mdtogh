@@ -17,7 +17,7 @@ mdtogh can **convert** your md files into html files like github does with featu
 * next/prev files link
 * file regexp to select your md files
 * fix relative link(ie. `<a href="01.md"></a>` => `<a href="01.html"></a>`)
-* custom template(still working)
+* custom template
 * offline renderer(still working)
 
 ##demo
@@ -77,6 +77,13 @@ Generate files with additional book info.
 	
 The format of `book.json` is given below.
 
+Generate files with custom template:
+
+	$ cd mdfiles
+	$ mdtogh --templates=path_to_templates 01.md
+	
+The rules for `templates` is given below.
+
 **Recommanded** options to `generate book`:
 
 	$ mdtogh --css --toc --book='book.json' --file_reg='your reg exp'
@@ -112,6 +119,38 @@ Your info is sent through `https` which is safe. `mdtogh` will not save any of i
 	"coverimage": "demo.jpg"
 }
 ```
+##Custom Templates Support
+
+mdtogh now support custom templates. You can use --templates to specific where to locate templates. You should give at least three files belows:
+
+*	content.html
+*	toc.html
+*	index.html
+
+mdtogh use [jinja2](https://github.com/mitsuhiko/jinja2) as template engine.
+
+For tutorial of template writing, please check [this](http://jinja.pocoo.org/docs/)
+
+###content.html
+
+`content.html` is used for generate standalone html file with things like `head`, `body` **after** content of md file is rendered by `github` or `offline renderer`.
+
+mdtogh will pass several  parameters to `content.html` which you can use:
+
+*	filetitle    #booktitle in book.json
+*	content      #contents after render by `github` or `offline renderer`
+*	toc          #not support yet
+*	needtoc		 #whether toc is needed
+*	prevfile     #link to prevfile. only used when `--toc` is set
+*	nextfile     #link to nextfile. only used when `--toc`is set
+
+###toc.html
+
+mdtogh will pass parameters to `toc.html`.
+
+###index.html
+
+
 
 ##TODO
 `mdtogh` is still on developing.
@@ -119,9 +158,7 @@ Your info is sent through `https` which is safe. `mdtogh` will not save any of i
 Features are developing or will be add later.
 
 *	support recursive options.
-*	custom html template
 *	add toc in content.html
-*	show ratelimit-remaining after generate complete
 *	offline renderer
 
 ##Contibuting
@@ -139,7 +176,7 @@ Any **help** will be **appreciated**.
 
 ##Change Log
 
-*	2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link
+*	2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link, add support for custom template
 *	2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by `setup.py`. Fix css link not include while rendering after first downloading css files
 *   2014/3/4 0.0.3 fix error leads by unicode filename
 *	2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
