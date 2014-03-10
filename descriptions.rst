@@ -20,6 +20,7 @@ mdtogh can **convert** your md files into html files like github does with featu
 - index.html for your book
 - next/prev files link
 - file regexp to select your md files
+- fix relative link(ie. <a href="01.md"></a> => <a href="01.html"></a>)
 - custom template(still working)
 - offline renderer(still working)
 
@@ -177,7 +178,8 @@ Links
 Change Log
 =====================
 
-- 2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by `setup.py`. Fix css link not include while rendering after first downloading css files
+- 2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link
+- 2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by setup.py. Fix css link not include while rendering after first downloading css files
 - 2014/3/4 0.0.3 fix error leads by unicode filename
 - 2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
 - 2014/3/1 0.0.1 first release

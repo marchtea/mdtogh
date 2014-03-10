@@ -7,7 +7,7 @@ Render local files exactly like github does.
 :copyright: (c) 2014 by Summer.
 """ 
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 from . import command
 from .transform import transform
