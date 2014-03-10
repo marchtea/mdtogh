@@ -2,8 +2,10 @@ from .github_renderer import github_render_content
 from .toc import get_toc
 from .toc import get_github_toc
 from jinja2 import Environment, PackageLoader
+from bs4 import BeautifulSoup
 import os.path
 import sys
+import re
 
 ##for jinjia2
 ##Get template to render
@@ -73,4 +75,27 @@ def render_toc(tocs, toc_depth):
 def render_index(title, cover, description, toc):
     return index_template.render(booktitle = title, coverimage = cover,
             description = description, toc = toc)
+
+
+def fix_content_link(contents, file_reg):
+    hrefreg = re.compile('^(http://|https://)')
+    for i, info in enumerate(contents):
+        content = info[1]
+        soup = BeautifulSoup(content)
+        hrefs = soup.find_all('a', href=file_reg)
+        for href in hrefs:
+            #fix only relative path
+            if hrefreg.search(href['href']) is None:
+                newpath = os.path.normpath(os.path.join(os.path.dirname(info[2]), href['href']))
+                if not os.path.exists(newpath):
+                    print 'warning: link in ', os.path.basename(info[2]), ': ', href['href'], ' not exists..'
+                else:
+                    htmlname = [info[0] for info in contents if info[2] == newpath]
+                    if htmlname:
+                        href['href'] = htmlname[0]
+                    else:
+                        print 'warning: link in ', os.path.basename(info[2]), ': ', href['href'], ' not in render list'
+        contents[i][1] = soup.prettify()
+
+    return contents
 

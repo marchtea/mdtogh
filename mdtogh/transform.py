@@ -3,6 +3,7 @@ from .renderer import render_content
 from .renderer import render_with_template
 from .renderer import render_toc
 from .renderer import render_index
+from .renderer import fix_content_link
 from .util import getDefaultPath
 from datetime import datetime
 import settings 
@@ -34,15 +35,15 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
 	if os.path.isdir(path):
 	    path_files = os.listdir(path)
             path_files = [os.path.join(path, f) for f in path_files if file_reg.search(f)]
-            render_flist.extend([f for f in path_files if os.path.isfile(f)])
+            render_flist.extend([os.path.abspath(f) for f in path_files if os.path.isfile(f)])
         elif os.path.isfile(path):
-                render_flist.append(path)
+                render_flist.append(os.path.abspath(path))
         else:
                 raise ValueError('Not supported file: ' + path)
     
     #print "in render_flist"
     #for f in render_flist:
-    #   print f
+      #print f
 
     print len(render_flist), " files in render list..." 
 
@@ -55,11 +56,14 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
         print i+1, "/", len(render_flist), ": ",
         content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline, encoding)
         htmlname = __get_htmlfilename(f)
-        contents.append([htmlname, content])
+        contents.append([htmlname, content, f])
         if needtoc:
             tocs.extend(__process_toc(toc, htmlname))
 
         print "done."
+
+    #fix relative links: 01.md => 01.html
+    contents = fix_content_link(contents, file_reg)
 
     if needtoc:
         rtoc = render_toc(tocs, toc_depth)
