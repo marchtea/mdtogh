@@ -13,7 +13,7 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None):
     if len(paths) == 0:
         paths = ['.']
 
@@ -53,7 +53,7 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     #Also, get toc
     for i, f in enumerate(render_flist):
         print i+1, "/", len(render_flist), ": ",
-        content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline)
+        content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline, encoding)
         htmlname = __get_htmlfilename(f)
         contents.append([htmlname, content])
         if needtoc:

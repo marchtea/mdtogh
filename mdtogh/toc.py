@@ -3,9 +3,9 @@ import markdown
 import codecs
 from bs4 import BeautifulSoup
 
-def get_toc(filename):
+def get_toc(filename, encoding):
 	#get toc
-	input_file = codecs.open(filename, mode='r', encoding='utf-8')
+	input_file = codecs.open(filename, mode='r', encoding=encoding)
 	text = input_file.read()
 	input_file.close()
 	md = markdown.Markdown(extensions=['toc', 'fenced_code'], extension_configs={'toc': [('slugify', github_link_renderer)]})

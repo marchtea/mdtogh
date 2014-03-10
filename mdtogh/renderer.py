@@ -13,16 +13,19 @@ content_template = env.get_template('content.html')
 toc_template = env.get_template('toc.html')
 index_template = env.get_template('index.html')
 
-def render_content(filename, gfm, username, password, toc, offline):
+def render_content(filename, gfm, username, password, toc, offline, encoding):
     '''render one file
         return: content, toc	
     '''
     print 'Rendering: ', filename,
     file.flush(sys.stdout)
+
     if offline:
         #offline_renderer, using get_toc to get toc
+        if encoding is None:
+            encoding = 'utf-8'
         content = ''
-        gentoc = get_toc(filename)
+        gentoc = get_toc(filename, encoding)
         extradata = None
         pass
     else:
