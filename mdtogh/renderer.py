@@ -1,7 +1,7 @@
 from .github_renderer import github_render_content
 from .toc import get_toc
 from .toc import get_github_toc
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, PackageLoader, FileSystemLoader
 from bs4 import BeautifulSoup
 import os.path
 import sys
@@ -9,11 +9,26 @@ import re
 
 ##for jinjia2
 ##Get template to render
-env = Environment(loader=PackageLoader('mdtogh', 'templates'),
-		extensions=['jinja2.ext.do', 'jinja2.ext.loopcontrols'])
-content_template = env.get_template('content.html')
-toc_template = env.get_template('toc.html')
-index_template = env.get_template('index.html')
+env = None
+content_template = None
+toc_template = None
+index_template = None
+
+def init_env(template_path):
+    global env, content_template, toc_template, index_template
+    #global content_template
+    #global toc_template
+    #global index_template
+    if template_path:
+        env = Environment(loader=FileSystemLoader(template_path), 
+                extensions=['jinja2.ext.do', 'jinja2.ext.loopcontrols'])
+    else:
+        env = Environment(loader=PackageLoader('mdtogh', 'templates'),
+                extensions=['jinja2.ext.do', 'jinja2.ext.loopcontrols'])
+    content_template = env.get_template('content.html')
+    toc_template = env.get_template('toc.html')
+    index_template = env.get_template('index.html')
+
 
 def render_content(filename, gfm, username, password, toc, offline, encoding):
     '''render one file

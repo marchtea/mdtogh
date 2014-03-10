@@ -4,6 +4,7 @@ from .renderer import render_with_template
 from .renderer import render_toc
 from .renderer import render_index
 from .renderer import fix_content_link
+from .renderer import init_env
 from .util import getDefaultPath
 from datetime import datetime
 import settings 
@@ -14,7 +15,11 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None):
+
+    #first, initial enviroment for jinjia2
+    init_env(template_path)
+
     if len(paths) == 0:
         paths = ['.']
 
