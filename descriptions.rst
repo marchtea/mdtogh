@@ -230,9 +230,7 @@ mdtogh is still on developing.
 Features are developing or will be add later.
 
 - support recursive options.
-- custom html template
 - add toc in content.html
-- show ratelimit-remaining after generate complete
 - offline renderer
 
 Contibuting
@@ -255,7 +253,7 @@ Links
 Change Log
 =====================
 
-- 2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link
+- 2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link, add support for custom template
 - 2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by setup.py. Fix css link not include while rendering after first downloading css files
 - 2014/3/4 0.0.3 fix error leads by unicode filename
 - 2014/3/3 0.0.2 add --toc_depth support, fix get_html_name bug
