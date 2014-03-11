@@ -3,7 +3,10 @@ from .renderer import render_content
 from .renderer import render_with_template
 from .renderer import render_toc
 from .renderer import render_index
+from .renderer import fix_content_link
+from .renderer import init_env
 from .util import getDefaultPath
+from datetime import datetime
 import settings 
 import requests
 import re
@@ -12,7 +15,11 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, refresh = False, file_reg = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None):
+
+    #first, initial enviroment for jinjia2
+    init_env(template_path)
+
     if len(paths) == 0:
         paths = ['.']
 
@@ -33,15 +40,15 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
 	if os.path.isdir(path):
 	    path_files = os.listdir(path)
             path_files = [os.path.join(path, f) for f in path_files if file_reg.search(f)]
-            render_flist.extend([f for f in path_files if os.path.isfile(f)])
+            render_flist.extend([os.path.abspath(f) for f in path_files if os.path.isfile(f)])
         elif os.path.isfile(path):
-                render_flist.append(path)
+                render_flist.append(os.path.abspath(path))
         else:
                 raise ValueError('Not supported file: ' + path)
     
     #print "in render_flist"
     #for f in render_flist:
-    #   print f
+      #print f
 
     print len(render_flist), " files in render list..." 
 
@@ -52,13 +59,16 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     #Also, get toc
     for i, f in enumerate(render_flist):
         print i+1, "/", len(render_flist), ": ",
-        content, toc = render_content(f, gfm, username, password, needtoc, offline)
+        content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline, encoding)
         htmlname = __get_htmlfilename(f)
-        contents.append([htmlname, content])
+        contents.append([htmlname, content, f])
         if needtoc:
             tocs.extend(__process_toc(toc, htmlname))
 
         print "done."
+
+    #fix relative links: 01.md => 01.html
+    contents = fix_content_link(contents, file_reg)
 
     if needtoc:
         rtoc = render_toc(tocs, toc_depth)
@@ -75,7 +85,7 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     else:
         rtoc = None
 
-#After get all file rendered, render them with template & save into files
+    #After get all file rendered, render them with template & save into files
     for i in range(len(contents)):
         p = contents[i - 1][0] if i > 0 else None 
         n = contents[i + 1][0] if i + 1 != len(contents) else None
@@ -85,6 +95,9 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
             f.write(rendered.encode('utf-8'))
 
     print 'All finished'
+    if extradata:
+        print "Github API rate remains: ", extradata['x-ratelimit-remaining'], "/", extradata['x-ratelimit-limit'], "."
+        print "Reset at: ", datetime.fromtimestamp(float(extradata['x-ratelimit-reset']))
 
 
 
