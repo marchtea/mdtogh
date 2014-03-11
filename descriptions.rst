@@ -17,6 +17,7 @@ Features
 mdtogh can **convert** your md files into html files like github does with features belows:
 
 - toc support
+- custom toc(use one file to be toc)
 - index.html for your book
 - next/prev files link
 - file regexp to select your md files
@@ -107,6 +108,13 @@ Generate files with custom template
 	$ mdtogh --templates=path_to_templates 01.md
 	
 The rules for templates is given below.
+
+Generate files with custom toc file
+
+.. code-block:: bash
+
+	$ cd mdfiles
+	$ mdtogh --toc --toc_file=Readme.md --file_reg='^\d.+\.md'
 
 **Recommanded** options to generate book
 
@@ -222,6 +230,7 @@ Parameters passed to toc.html:
 - coverimage *#coverimage in book.json*
 - description *#description in book.json*
 - toc         *#toc rendered with toc.html*
+- custom_toc  *#whether use custom_toc. custom_toc is rendered like normal md file*
 
 TODO
 ===================
@@ -253,6 +262,7 @@ Links
 Change Log
 =====================
 
+- 2014/3/11 0.0.7 add option: --toc_file. user can specific one file as toc. relative link will be resolved automatically.
 - 2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link, add support for custom template
 - 2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by setup.py. Fix css link not include while rendering after first downloading css files
 - 2014/3/4 0.0.3 fix error leads by unicode filename

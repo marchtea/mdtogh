@@ -87,30 +87,32 @@ def render_toc(tocs, toc_depth):
     return toc_template.render(tocs = tocs, toc_depth = toc_depth)
 
 
-def render_index(title, cover, description, toc):
+def render_index(title, cover, description, toc, custom_toc):
     return index_template.render(booktitle = title, coverimage = cover,
-            description = description, toc = toc)
+            description = description, toc = toc, custom_toc = custom_toc)
 
 
-def fix_content_link(contents, file_reg):
+def fix_file_link(fcontent, f, contents, file_reg):
+    #fix link in file
+    #fcontent: content of file to be fixed
+    #f: name of file to be fixed
+    #contents: files after render
     hrefreg = re.compile('^(http://|https://)')
-    for i, info in enumerate(contents):
-        content = info[1]
-        soup = BeautifulSoup(content)
-        hrefs = soup.find_all('a', href=file_reg)
-        for href in hrefs:
-            #fix only relative path
-            if hrefreg.search(href['href']) is None:
-                newpath = os.path.normpath(os.path.join(os.path.dirname(info[2]), href['href']))
-                if not os.path.exists(newpath):
-                    print 'warning: link in ', os.path.basename(info[2]), ': ', href['href'], ' not exists..'
-                else:
-                    htmlname = [info[0] for info in contents if info[2] == newpath]
-                    if htmlname:
-                        href['href'] = htmlname[0]
-                    else:
-                        print 'warning: link in ', os.path.basename(info[2]), ': ', href['href'], ' not in render list'
-        contents[i][1] = soup.prettify()
 
-    return contents
+    soup = BeautifulSoup(fcontent)
+    hrefs = soup.find_all('a', href=file_reg)
+    for href in hrefs:
+        #fix only relative path
+        if hrefreg.search(href['href']) is None:
+            newpath = os.path.normpath(os.path.join(os.path.dirname(f), href['href']))
+            if not os.path.exists(newpath):
+                print 'warning: link in ', os.path.basename(f), ': ', href['href'], ' not exists..'
+            else:
+                htmlname = [info[0] for info in contents if info[2] == newpath]
+                if htmlname:
+                    href['href'] = htmlname[0]
+                else:
+                    print 'warning: link in ', os.path.basename(info[2]), ': ', href['href'], ' not in render list'
+
+    return soup.prettify() 
 

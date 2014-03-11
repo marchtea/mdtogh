@@ -129,7 +129,13 @@
 			{% if description %}
 				<p>{{ description }}</p>
 			{% endif %}
-			{{ toc }}
+            {% if custom_toc %}
+              <article class="markdown-body entry-content" itemprop="mainContentOfPage">
+                {{ toc|safe }}
+              </article>
+            {% else %}
+                {{ toc }}
+            {% endif %}
 		</div>
 	</div>
   </div>

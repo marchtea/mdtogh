@@ -3,7 +3,7 @@ from .renderer import render_content
 from .renderer import render_with_template
 from .renderer import render_toc
 from .renderer import render_index
-from .renderer import fix_content_link
+from .renderer import fix_file_link
 from .renderer import init_env
 from .util import getDefaultPath
 from datetime import datetime
@@ -15,7 +15,7 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, toc_file = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None):
 
     #first, initial enviroment for jinjia2
     init_env(template_path)
@@ -68,18 +68,27 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
         print "done."
 
     #fix relative links: 01.md => 01.html
-    contents = fix_content_link(contents, file_reg)
+    for i, info in enumerate(contents): 
+        contents[i][1] = fix_file_link(info[1], info[2], contents, file_reg)
 
     if needtoc:
-        rtoc = render_toc(tocs, toc_depth)
+        if toc_file:
+            print 'toc_file:', toc_file
+            toc_file = os.path.abspath(toc_file)
+            print 'Generating custom toc'
+            rtoc, toc, extradata = render_content(toc_file, gfm, username, password, False, offline, encoding)
+            print 'done.'
+            rtoc = fix_file_link(rtoc, toc_file, contents, file_reg)
+        else:
+            rtoc = render_toc(tocs, toc_depth)
 
         ##after render toc, we render index
         bookinfo = __get_book_conf(book)
         print 'Generating index.html'
         if bookinfo:
-            book_index = render_index(bookinfo['title'], bookinfo['coverimage'], bookinfo['description'], rtoc)
+            book_index = render_index(bookinfo['title'], bookinfo['coverimage'], bookinfo['description'], rtoc, True if toc_file else False)
         else:
-            book_index = render_index('', '', '', rtoc)
+            book_index = render_index('', '', '', rtoc, True if toc_file else False)
         with open('index.html', 'w') as f:
             f.write(book_index.encode('utf-8'))
     else:

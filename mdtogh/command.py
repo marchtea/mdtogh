@@ -25,6 +25,7 @@ Options:
   --pass=<password>    GitHub password for API authentication
   --toc                Generate table of contents
   --toc_depth=<n>      Max toc depth, default to 2
+  --toc_file=<file>    You can specific a file to be toc(Just incase you have one)
   --book=<book.json>   Generate toc with book info, only used when --toc is set
   --offline            Use offline renderer
   --encoding=<utf-8>   encode for file, use only when --offline is set
@@ -63,7 +64,7 @@ def main(argv=None):
     try:
         transform(args['<path>'], args['--cache_path'], args['--system_css'], args['--css'], args['--abscss'], 
                 args['--gfm'], args['--user'],args['--pass'], 
-                args['--toc'], args['--toc_depth'], args['--book'], 
+                args['--toc'], args['--toc_depth'], args['--toc_file'], args['--book'], 
                 args['--offline'], args['--encoding'], args['--refresh'], args['--file_reg'], args['--templates'])
         return 0
     except ValueError as e:
