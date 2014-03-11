@@ -3,6 +3,7 @@ from .toc import get_toc
 from .toc import get_github_toc
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 from bs4 import BeautifulSoup
+from urllib import url2pathname
 import os.path
 import sys
 import re
@@ -104,7 +105,7 @@ def fix_file_link(fcontent, f, contents, file_reg):
     for href in hrefs:
         #fix only relative path
         if hrefreg.search(href['href']) is None:
-            newpath = os.path.normpath(os.path.join(os.path.dirname(f), href['href']))
+            newpath = os.path.normpath(os.path.join(os.path.dirname(f), url2pathname(href['href'])))
             if not os.path.exists(newpath):
                 print 'warning: link in ', os.path.basename(f), ': ', href['href'], ' not exists..'
             else:
