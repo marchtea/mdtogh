@@ -20,8 +20,8 @@ mdtogh can **convert** your md files into html files like github does with featu
 - index.html for your book
 - next/prev files link
 - file regexp to select your md files
-- fix relative link(ie. <a href="01.md"></a> => <a href="01.html"></a>)
-- custom template(still working)
+- fix relative link(ie. `<a href="01.md"></a>` => `<a href="01.html"></a>`)
+- custom template
 - offline renderer(still working)
 
 demo
@@ -99,6 +99,15 @@ Generate files with additional book info
 	
 The format of book.json is given below.
 
+Generate files with custom template
+
+.. code-block:: bash
+
+	$ cd mdfiles
+	$ mdtogh --templates=path_to_templates 01.md
+	
+The rules for templates is given below.
+
 **Recommanded** options to generate book
 
 .. code-block:: bash
@@ -145,6 +154,74 @@ book.json
         "description": "This is a book.",
         "coverimage": "demo.jpg"
     }
+
+Custom Templates Support
+========================
+
+mdtogh now support custom templates. You can use --templates to specific where to locate templates. You should give at least three files belows:
+
+- content.html
+- toc.html
+- index.html
+
+mdtogh use `jinja2`_ as template engine.
+
+For tutorial of template writing, please check `jinja doc`_
+
+- content.html
+
+content.html is used for generate standalone html file with things like head, body **after** content of md file is rendered by github or offline renderer.
+
+mdtogh will pass several  parameters to content.html which you can use:
+
+- filetitle 	*#booktitle in book.json`*
+- content      *#contents after render by `github` or `offline renderer`*
+- toc          *#not support yet*
+- needtoc		 *#whether toc is needed*
+- prevfile     *#link to prevfile. only used when `--toc` is set*
+- nextfile     *#link to nextfile. only used when `--toc`is set*
+
+
+toc.html
+
+toc.html is used for generate table of content which will be used later in index.html. So, you don't need add html or body tag.
+
+
+Parameters passed to toc.html.
+
+- tocs 
+- toc_depth
+
+tocs
+
+tocs is a list of headers. It's set like 
+
+.. code-block:: javascript 
+
+    [
+        ['h1', 'top header', 'headerlink'],
+        ['h2', 'sub header', 'header link'],
+        ....
+    ]
+
+toc_depth
+
+toc_depth is set by user. It refers the maxium depth of header. It's an integer value. ie.
+
+.. code-block:: javascript 
+
+	2
+
+index.html
+
+index.html is used for generate index.html for book. 
+
+Parameters passed to toc.html:
+
+- booktitle *#title in book.json*
+- coverimage *#coverimage in book.json*
+- description *#description in book.json*
+- toc         *#toc rendered with toc.html*
 
 TODO
 ===================
@@ -198,3 +275,5 @@ Special thanks to `grip`_. Without its excellent work, this tool can't be done.
 .. _The-Art-Of-Programming-By-July: https://github.com/julycoding/The-Art-Of-Programming-By-July
 .. _taop.marchtea.com: http://taop.marchtea.com
 .. _Github repo: http://github.com/marchtea/mdtogh
+.. _jinja2: https://github.com/mitsuhiko/jinja2 
+.. _jinja doc: http://jinja.pocoo.org/docs/

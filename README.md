@@ -119,6 +119,7 @@ Your info is sent through `https` which is safe. `mdtogh` will not save any of i
 	"coverimage": "demo.jpg"
 }
 ```
+
 ##Custom Templates Support
 
 mdtogh now support custom templates. You can use --templates to specific where to locate templates. You should give at least three files belows:
@@ -137,19 +138,52 @@ For tutorial of template writing, please check [this](http://jinja.pocoo.org/doc
 
 mdtogh will pass several  parameters to `content.html` which you can use:
 
-*	filetitle    #booktitle in book.json
-*	content      #contents after render by `github` or `offline renderer`
-*	toc          #not support yet
-*	needtoc		 #whether toc is needed
-*	prevfile     #link to prevfile. only used when `--toc` is set
-*	nextfile     #link to nextfile. only used when `--toc`is set
+*	filetitle 	*#booktitle in book.json`*
+*	content      *#contents after render by `github` or `offline renderer`*
+*	toc          *#not support yet*
+*	needtoc		 *#whether toc is needed*
+*	prevfile     *#link to prevfile. only used when `--toc` is set*
+*	nextfile     *#link to nextfile. only used when `--toc`is set*
 
 ###toc.html
 
-mdtogh will pass parameters to `toc.html`.
+`toc.html` is used for generate table of content which will be used later in index.html. So, you don't need add `<html>` or `<body>` tag.
+
+
+Parameters passed to `toc.html`.
+
+*	tocs 
+*	toc_depth
+
+####tocs
+tocs is a list of headers. It's set like :
+
+```
+[
+	['h1', 'top header', 'headerlink'],
+	['h2', 'sub header', 'header link'],
+	....
+]
+```
+
+####toc_depth
+
+toc_depth is set by user. It refers the maxium depth of header. It's an integer value. ie.
+
+```
+	2
+```
 
 ###index.html
 
+`index.html` is used for generate index.html for book. 
+
+Parameters passed to `index.html`:
+
+*	booktitle *#title in book.json*
+*	coverimage *#coverimage in book.json*
+*	description *#description in book.json*
+*	toc         *#toc rendered with toc.html*
 
 
 ##TODO
