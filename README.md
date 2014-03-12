@@ -19,7 +19,7 @@ mdtogh can **convert** your md files into html files like github does with featu
 * file regexp to select your md files
 * fix relative link(ie. `<a href="01.md"></a>` => `<a href="01.html"></a>`)
 * custom template
-* offline renderer(still working)
+* offline renderer
 
 ##demo
 
@@ -89,6 +89,11 @@ Generate files with custom toc file:
 
 	$ cd mdfiles
 	$ mdtogh --toc --toc_file=Readme.md --file_reg='^\d.+\.md'
+	
+Offline rendering:
+
+	$ cd mdfiles
+	$ mdtogh --offline 01.0.md
 
 **Recommanded** options to `generate book`:
 
@@ -200,7 +205,6 @@ Features are developing or will be add later.
 
 *	support recursive options.
 *	add toc in content.html
-*	offline renderer
 
 ##Contibuting
 Any **help** will be **appreciated**.
@@ -217,6 +221,7 @@ Any **help** will be **appreciated**.
 
 ##Change Log
 
+*	2014/3/12 0.0.8 add option: --offline. offline rendering is supported.
 *	2014/3/11 0.0.7 add option: --toc_file. user can specific one file as toc. relative link will be resolved automatically.
 *	2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link, add support for custom template
 *	2014/3/5 0.0.5 add MANIFEST.in, fix pacakge wrapped by `setup.py`. Fix css link not include while rendering after first downloading css files
