@@ -1,6 +1,7 @@
 from .github_renderer import github_render_content
 from .toc import get_toc
 from .toc import get_github_toc
+from .offline_renderer import offline_renderer
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 from bs4 import BeautifulSoup
 from urllib import url2pathname
@@ -42,7 +43,7 @@ def render_content(filename, gfm, username, password, toc, offline, encoding):
         #offline_renderer, using get_toc to get toc
         if encoding is None:
             encoding = 'utf-8'
-        content = ''
+        content = offline_renderer(filename, encoding)
         gentoc = get_toc(filename, encoding)
         extradata = None
         pass

@@ -175,7 +175,8 @@ def _get_style_urls(cache_path):
             return urls
 
     except Exception as ex:
-        print '* Error: Retrive style error:', str(ex)
+        print ''
+        raise RuntimeError('Retrieve style error:' + str(ex))
     return []
 
 
