@@ -10,3 +10,8 @@ Thumbs.db
 #vim backup
 *~
 .*.swp
+
+#easysetup
+build/*
+dist/*
+mdtogh.egg-info/*
