@@ -15,7 +15,7 @@ import shutil
 import codecs
 import json
 
-def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, toc_file = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None):
+def transform(paths = None, cache_path = None, system_css = False, css = False, abscss = False, gfm = False, username = None, password = None, needtoc = True, toc_depth = None, toc_file = None, book = '', offline = False, encoding = 'utf-8', refresh = False, file_reg = None, template_path = None, timeout = 20):
 
     #first, initial enviroment for jinjia2
     init_env(template_path)
@@ -52,20 +52,47 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
 
     print len(render_flist), " files in render list..." 
 
+    timeout = float(timeout)
+
     contents = []
     tocs = []
+    exception_occur = False
+    extradata = None
+
+    #load pickled data
+    ##loadxxxx
+    if not refresh:
+        contents, tocs = __load_content_toc(offline)
 
     #get all file rendered using github api or offline renderer
     #Also, get toc
-    for i, f in enumerate(render_flist):
-        print i+1, "/", len(render_flist), ": ",
-        content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline, encoding)
-        htmlname = __get_htmlfilename(f)
-        contents.append([htmlname, content, f])
-        if needtoc:
-            tocs.extend(__process_toc(toc, htmlname))
+    try:
+        for i, f in enumerate(render_flist):
+            print i+1, "/", len(render_flist), ": ",
+            rf_stat = os.stat(f)
+            if len([content[2] for content in contents if content[2] == f and content[3] == rf_stat.st_mtime]):
+               print "File not changed, skip..."
+               continue
+                
+            content, toc, extradata = render_content(f, gfm, username, password, needtoc, offline, encoding, timeout)
+            htmlname = __get_htmlfilename(f)
+            contents.append([htmlname, content, f, rf_stat.st_mtime])
+            if needtoc:
+                tocs.extend(__process_toc(toc, htmlname))
 
-        print "done."
+            print "done."
+    except requests.RequestException as e:
+        print "\nError occur when request for github: ", e
+        exception_occur = True
+
+    #save renderer data 
+    __save_content_toc(contents, tocs, offline)
+
+    #if exception occured, exit
+    if exception_occur:
+        print "Network error, please try again later"
+        return
+    
 
     #fix relative links: 01.md => 01.html
     for i, info in enumerate(contents): 
@@ -76,7 +103,12 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
             print 'toc_file:', toc_file
             toc_file = os.path.abspath(toc_file)
             print 'Generating custom toc'
-            rtoc, toc, extradata = render_content(toc_file, gfm, username, password, False, offline, encoding)
+            try:
+                rtoc, toc, extradata = render_content(toc_file, gfm, username, password, False, offline, encoding, timeout)
+            except requests.RequestException as e:
+                print "\nError occur when request for github: ", e
+                return
+
             print 'done.'
             rtoc = fix_file_link(rtoc, toc_file, contents, file_reg)
         else:
@@ -227,4 +259,28 @@ def get_style(cache_path, system_css, refresh):
     style_urls.extend(_get_style_urls(cache_path))
     styles, style_paths = _get_style_contents(style_urls, cache_path)
     return styles, style_paths
+
+
+def __save_content_toc(contents, toc, offline):
+    with open(".md_cache", "wb") as f:
+        import pickle
+        pickle.dump([offline, contents, toc], f)
+
+
+def __load_content_toc(offline):
+    contents = []
+    tocs = []
+
+    try:
+        with open(".md_cache", "rb") as f:
+            import pickle
+            ofl, contents, tocs = pickle.load(f)
+            if ofl != offline:
+                contents = []
+                tocs = []
+    except:
+        pass
+
+
+    return contents, tocs
 

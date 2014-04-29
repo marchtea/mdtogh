@@ -2,7 +2,7 @@ import requests
 import json
 
 
-def github_render_content(text, gfm=False, context=None, username=None, password=None):
+def github_render_content(text, gfm=False, context=None, username=None, password=None, timeout=20):
     """Renders the specified markup using the GitHub API."""
     if gfm:
         url = 'https://api.github.com/markdown'
@@ -16,7 +16,7 @@ def github_render_content(text, gfm=False, context=None, username=None, password
     headers = {'content-type': 'text/plain'}
     auth = (username, password) if username else None
 
-    r = requests.post(url, headers=headers, data=data, auth=auth)
+    r = requests.post(url, headers=headers, data=data, auth=auth, timeout = timeout)
 
     extradata = None
     message = None

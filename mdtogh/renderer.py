@@ -32,7 +32,7 @@ def init_env(template_path):
     index_template = env.get_template('index.html')
 
 
-def render_content(filename, gfm, username, password, toc, offline, encoding):
+def render_content(filename, gfm, username, password, toc, offline, encoding, timeout):
     '''render one file
         return: content, toc	
     '''
@@ -50,7 +50,7 @@ def render_content(filename, gfm, username, password, toc, offline, encoding):
     else:
         ##using github renderer
         with open(filename) as f:
-            content, message, extradata = github_render_content(f.read(), gfm, None, username, password)
+            content, message, extradata = github_render_content(f.read(), gfm, None, username, password, timeout)
             if message != None:
                 raise RuntimeError('render file error: ' + message)
 

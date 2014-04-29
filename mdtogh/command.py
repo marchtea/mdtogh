@@ -14,24 +14,25 @@ Where:
   <path> is a file or a directory to render, [default: '.']
 
 Options:
-  --templates=<path>    path of templates, it should contains all three files: content.html, toc.html, index.html
-  --cache_path=<path>  path to store style file cache, default to current directory
-  --system_css         using system wide css.
-  --css                when NOT set, css contents are generate into html
-  --abscss             link css with absolute path, use only with --css is set 
-  --gfm                Use GitHub-Flavored Markdown, e.g. comments or issues
-  --context=<repo>     The repository context, only taken into account with --gfm
-  --user=<username>    GitHub username for API authentication
-  --pass=<password>    GitHub password for API authentication
-  --toc                Generate table of contents
-  --toc_depth=<n>      Max toc depth, default to 2
-  --toc_file=<file>    You can specific a file to be toc(Just incase you have one)
-  --book=<book.json>   Generate toc with book info, only used when --toc is set
-  --offline            Use offline renderer
-  --encoding=<utf-8>   encode for file, use only when --offline is set
-  --refresh            clear cached styles & refetch them
-  --file_reg=<reg_exp> when path is a directory, using reg_exp to get file, this reg_exp must obey python's rules
-		       if not set, mdtogh will get all files end with .md or .markdown, Notice: this is case-insensitive.
+  --templates=<path>       path of templates, it should contains all three files: content.html, toc.html, index.html
+  --cache_path=<path>      path to store style file cache, default to current directory
+  --system_css             using system wide css.
+  --css                    when NOT set, css contents are generate into html
+  --abscss                 link css with absolute path, use only with --css is set 
+  --gfm                    Use GitHub-Flavored Markdown, e.g. comments or issues
+  --context=<repo>         The repository context, only taken into account with --gfm
+  --user=<username>        GitHub username for API authentication
+  --pass=<password>        GitHub password for API authentication
+  --toc                    Generate table of contents
+  --toc_depth=<n>          Max toc depth, default to 2
+  --toc_file=<file>        You can specific a file to be toc(Just incase you have one)
+  --book=<book.json>       Generate toc with book info, only used when --toc is set
+  --offline                Use offline renderer
+  --encoding=<utf-8>       encode for file, use only when --offline is set
+  --refresh                clear cached styles & refetch them
+  --file_reg=<reg_exp>     when path is a directory, using reg_exp to get file, this reg_exp must obey python's rules
+                           if not set, mdtogh will get all files end with .md or .markdown, Notice: this is case-insensitive.
+  --timeout=<time>         timeout for request github in second. [default: 20]
 
 Notice:
 	Due to limitation by github, the rate of anonymous access to github api is limit to 60 in an hour.
@@ -65,7 +66,7 @@ def main(argv=None):
         transform(args['<path>'], args['--cache_path'], args['--system_css'], args['--css'], args['--abscss'], 
                 args['--gfm'], args['--user'],args['--pass'], 
                 args['--toc'], args['--toc_depth'], args['--toc_file'], args['--book'], 
-                args['--offline'], args['--encoding'], args['--refresh'], args['--file_reg'], args['--templates'])
+                args['--offline'], args['--encoding'], args['--refresh'], args['--file_reg'], args['--templates'], args['--timeout'])
         return 0
     except ValueError as e:
       print "Error: ", e
