@@ -24,6 +24,8 @@ mdtogh can **convert** your md files into html files like github does with featu
 - fix relative link(ie. `<a href="01.md"></a>` => `<a href="01.html"></a>`)
 - custom template
 - offline renderer
+- proxy support(respect https_proxy environment variable)
+- cache support
 
 demo
 =================
@@ -268,6 +270,7 @@ Links
 Change Log
 =====================
 
+- 2014/4/30 0.0.9 add option: --timeout. set timeout for requests. add cache support. now it will skip file which is not changed.
 - 2014/3/12 0.0.8 add option: --offline. offline rendering is supported.
 - 2014/3/11 0.0.7 add option: --toc_file. user can specific one file as toc. relative link will be resolved automatically.
 - 2014/3/6 0.0.6 add option: --encoding for offline renderer, fix relative link, add support for custom template
