@@ -84,6 +84,9 @@ def transform(paths = None, cache_path = None, system_css = False, css = False, 
     except requests.RequestException as e:
         print "\nError occur when request for github: ", e
         exception_occur = True
+    except RuntimeError as e:
+        print "\nRunTime Error:", e
+        exception_occur = True
 
     #save renderer data 
     __save_content_toc(contents, tocs, offline)
